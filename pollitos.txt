@@ -1,0 +1,186 @@
+import static java.lang.System.out;
+import java.util.Scanner;
+import java.util.Random;
+ 
+ 
+class ofensivo {
+ 
+             
+                public static void main(String args[]) {
+ 
+                        Scanner keyboard = new Scanner(System.in);
+                        out.println("Uy mami, con ese culo yo ");
+                        int respuestas = keyboard.nextInt() ;
+                        
+                        
+                        switch (respuestas) {
+                        case 1:
+                        	out.println("La invito a cagar a mi casa!");
+                        	break;
+                        	                       
+                        case 2:
+                        	out.println("Me le tomo un vasado de diarrea!");
+                        	break;
+                        	
+                        case 3:
+                        	out.println("Yo la invito al proctólogo");
+                        	break;
+                        default:
+                        	out.println("No seamos tan ordinarios, mano...!");
+                        }
+                        
+                }
+}
+
+
+
+
+    import static java.lang.System.out;
+    import java.util.Scanner;
+    import java.util.Random;
+     
+     
+    class elefante {
+     
+                   
+                    public static void main(String args[]) {
+                   
+                           
+                   
+                            for (int count = 1; count <= 1000000; count++) {
+                                    out.print(count);
+                                    out.print("Elefantes se columpiaban sobre la tela de una araña, como veían que resistía fueron a llamar a otro elefante.");
+                                    out.println(".");
+                            }
+                    }
+                   
+    }
+
+
+
+
+import static java.lang.System.out;
+import java.util.Scanner;
+import java.util.Random;
+
+
+class RuletaRusa {
+ 
+                
+                public static void main(String args[]) {
+
+                        Scanner keyboard = new Scanner(System.in);
+                        
+                        out.print("Ruleta Rusa Virtual: Ingrese un número entre 1 y 1 millón ");
+                        
+                        int inputNumber = keyboard.nextInt();
+                        int randomNumber = new Random().nextInt(1000000) + 1;
+                        
+                        
+                        if (inputNumber == randomNumber) {
+                                out.println("**********");
+                                out.println("*Usted gana.*");
+                                out.println("**********");
+                        } else {
+                                out.println("Oh! Oh! hora de dispararse en la cabeza..");
+                                out.print("El número era ");
+                                out.println(randomNumber + ".");
+                        }
+                        out.println("Mejor suerte en la próxima (vida).");
+                }
+}
+
+
+import static java.lang.System.out;
+import java.util.Scanner;
+import java.util.Random;
+ 
+ 
+class elefantesif {
+ 
+             
+                public static void main(String args[]) {
+ 
+                        Scanner keyboard = new Scanner(System.in);
+                        String strofa1="Los Pollitos Dicen! Pio! Pio! Pio!\n";
+                        String strofa2="cuando tienen Hambre! Cuando tienen frio!\n";
+                        String strofa3="La gallina busca, el maiz y el trigo\n";
+                        String strofa4="les da la comida y les presta abrigo\n"; 
+                        String strofa5="bajos sus dos alas acurrucaditos \n hasta el otro día duermen los pollitos\n";
+                        String mensaje="¿No le gustó? Comase ";
+                        String mensaje2=" Toneladas de mierda";
+                        
+                        out.print("Quiere que este programa le cante los pollitos? 1/0 ");
+                       
+                        int inputNumber = keyboard.nextInt();
+                        int randomNumber = new Random().nextInt(1000000) + 1;
+                        
+                        if (inputNumber == 0 ){
+                                out.print("Entonces muerase! malparido!");
+                                System.exit(0);
+                        }
+                        if (inputNumber == 1) {
+                                out.print("Los Pollitos Dicen: a = pio,pio,pio; b= guau, guau!");
+                        String inputLetter = keyboard.next();   
+                        if (inputLetter.equals("a")) {
+                        out.print(strofa1);
+                        } else {
+                                out.print("no, no, los Pollitos NO ladran!\n");
+                                System.exit(0);
+                        }
+                        }
+                        out.println("Cuando tienen: a = hambre; b= frio! c= ambas!\n ");
+                        String inputchar = keyboard.next();     
+                        if(inputchar.equals("c"))       {
+                                out.print(strofa1);
+                                out.print(strofa2);
+                        } else {
+                                out.println("¿es que no tuviste infancia?! D:");
+                                System.exit(0);
+                        }
+                        out.println("La Gallina Busca: a = El Maiz b = El trigo c = Salchichas d = KFC e= A y B");
+                        String inputcosa = keyboard.next();     
+                        if(inputcosa.equals("e")){
+                                out.print(strofa1);
+                                out.print(strofa2);
+                                out.print(strofa3);
+                } else {
+                        out.println("Ya, no hay dudas, no tuviste infancia!");
+                        System.exit(0);
+                }
+                    out.print("Les da la: a = comida b = patada c = veneno");
+                    String inputcosita = keyboard.next();       
+                    if(inputcosita.equals("a")){
+                    out.print("y les presta: a = abrigo b = plata c = El carro");
+                    } else { 
+                        out.print("¿El carro? ¿Plata? ¿En serio?");
+                        System.exit(0);
+                    }
+                    String inputcosota = keyboard.next();       
+                    if(inputcosota.equals("a")){
+                        out.print(strofa1);
+                        out.print(strofa2);
+                        out.print(strofa3);
+                        out.print(strofa4);
+                    } else {
+                        out.println("me decepcionas, ser sin infancia!");
+                        System.exit(0);
+                    }
+                    out.print("Bajo sus dos alas:  a = acurrucaditos b = acostados c = muertos");
+                    String inputcoseta = keyboard.next();       
+                    if(inputcoseta.equals("a")){
+                    out.print("duermen los: a = Buitres B = Pollitos C = Perritos");
+                    String inputcosuta = keyboard.next();       
+                    if(inputcosuta.equals("b")){
+                        out.print(strofa1);
+                        out.print(strofa2);
+                        out.print(strofa3);
+                        out.print(strofa4);
+                        out.print(strofa5);
+                    }
+                    }
+                        out.print("\n\n\n\nGracias por jugar!!\n");
+                        out.println(mensaje + randomNumber + mensaje2);
+                        System.exit(0);
+}               
+}

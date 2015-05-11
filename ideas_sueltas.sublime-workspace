@@ -1,0 +1,277 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Libro",
+				"LibroAdmin	class"
+			],
+			[
+				"proj",
+				"proj_id	param"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 374.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 435.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/maestro/Workspace/ideas_sueltas"
+	],
+	"file_history":
+	[
+		"/home/maestro/Workspace/ideas_sueltas/happiness.py",
+		"/home/maestro/Workspace/ideas_sueltas/chat_client.py",
+		"/home/maestro/Workspace/ideas_sueltas/ElementaryOS_AIS.py",
+		"/home/maestro/Workspace/ideas_sueltas/Ubuntu_AIS.py",
+		"/home/maestro/Workspace/pry_dj/misitio/misitio/urls.py",
+		"/home/maestro/Workspace/pry_dj/misitio/misitio/settings.py",
+		"/home/maestro/Workspace/pry_dj/misitio/contactos/views.py",
+		"/home/maestro/Workspace/pry_dj/misitio/contactos/templates/formulario-contactos.html",
+		"/home/maestro/Workspace/pry_dj/misitio/biblioteca/templates/formulario-contactos.html",
+		"/home/maestro/Workspace/pry_dj/misitio/biblioteca/templates/resultados.html",
+		"/home/maestro/Workspace/pry_dj/misitio/biblioteca/views.py",
+		"/home/maestro/Workspace/pry_dj/misitio/biblioteca/templates/formulario_buscar.html",
+		"/home/maestro/Workspace/pry_dj/misitio/biblioteca/models.py",
+		"/home/maestro/Workspace/pry_dj/misitio/biblioteca/admin.py",
+		"/home/maestro/Workspace/pry_dj/misitio/misitio/views.py",
+		"/home/maestro/Workspace/pry_dj/misitio/misitio/templates/base.html",
+		"/home/maestro/Workspace/pry_dj/misitio/misitio/templates/horas_adelante.html",
+		"/home/maestro/Workspace/pry_dj/misitio/misitio/templates/fecha_actual.html",
+		"/home/maestro/Workspace/django_proy/blog/blog_src/urls.py",
+		"/home/maestro/Workspace/django_proy/blog/blog_src/settings.py",
+		"/home/maestro/Workspace/django_proy/blog/blog_main/models.py",
+		"/home/maestro/Workspace/django_proy/blog/blog_main/urls.py",
+		"/home/maestro/Workspace/django_proy/blog/README.md",
+		"/home/maestro/Workspace/django_proy/blog/LICENSE",
+		"/home/maestro/Workspace/basecamp_api/api/libs/bcx_lib.py",
+		"/home/maestro/Workspace/basecamp_api/api/README.md",
+		"/home/maestro/Workspace/basecamp_api/api/test.py",
+		"/home/maestro/Workspace/basecamp_api/api/client.py",
+		"/home/maestro/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/maestro/Workspace/basecamp_api/api/bcx_lib.py",
+		"/home/maestro/Workspace/basecamp_api/api/secret.py",
+		"/home/maestro/Workspace/basecamp_api/api/.gitignore",
+		"/home/maestro/Workspace/basecamp_api/api/bcx_client.py",
+		"/home/maestro/Workspace/basecamp_api/api/new_api.py",
+		"/home/maestro/Workspace/basecamp_api/api/basecamp_client.py",
+		"/home/maestro/.config/sublime-text-3/Packages/User/Python Django.sublime-settings",
+		"/home/maestro/Workspace/basecamp_api/api/classic_api.py",
+		"/home/maestro/Workspace/ideas_sueltas/basecamp.py",
+		"/home/maestro/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/maestro/Workspace/dialisyst_daemon/dialisyst/libs/str_transform.py",
+		"/home/maestro/Workspace/dialisyst_daemon/dialisyst/dialisyst.py",
+		"/home/maestro/Workspace/dialisyst_daemon/dialisyst/libs/db_connect.py",
+		"/home/maestro/Workspace/dialisyst_daemon/dialisyst/bd_mq_fill.py",
+		"/home/maestro/Workspace/dialisyst_daemon/dialisyst/bd_pt_fill.py",
+		"/home/maestro/.config/sublime-text-3/Packages/User/SublimeLinter.sublime-settings",
+		"/home/maestro/.config/sublime-text-3/Packages/User/JSON.sublime-settings",
+		"/home/maestro/Workspace/dialisyst_daemon/dialisyst/config.cfg",
+		"/home/maestro/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
+		"/home/maestro/.config/sublime-text-3/Packages/User/Plain text.sublime-settings",
+		"/home/maestro/.config/sublime-text-3/Packages/User/Python.sublime-settings",
+		"/home/maestro/Workspace/ideas_sueltas/pollitos.txt"
+	],
+	"find":
+	{
+		"height": 28.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			" =",
+			", ",
+			"\n",
+			"echo -e",
+			"\"",
+			"GET ",
+			"/projects/1/todo",
+			"[",
+			"\"",
+			">",
+			"=",
+			">",
+			"</a></li>",
+			">",
+			"=",
+			"<li><a href",
+			"<li><a href=",
+			"people",
+			"@requires",
+			"requires",
+			"Null",
+			"null",
+			"true",
+			"false",
+			",",
+			":",
+			">>> ",
+			"save",
+			"marg",
+			"\n              "
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			":",
+			"', '",
+			", ",
+			"None",
+			"Null",
+			"True",
+			"False",
+			", ",
+			": ",
+			"",
+			" "
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "ideas_sueltas.sublime-project",
+	"replace":
+	{
+		"height": 70.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/Workspace/django_proy/blog/blog.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 336.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
