@@ -1,0 +1,28 @@
+#!/bin/bash
+
+for module in `ls`;
+do
+	if [ -e ${module}/.bzr ] || [ -e ${module}/.svn ] || [ -e ${module}/.git ];then
+		echo "Start sync ${module}..."
+		pushd $PWD/${module} > /dev/null
+			if [ -e .bzr ];then
+				echo "bzr pull"
+				bzr pull
+			elif [ -e .git ];then
+				echo "git pull"
+				git pull
+			elif [ -e .svn ];then
+				echo "svn up"
+				svn up
+			elif [ -e .hg];then
+				echo "hg pull"
+				hg pull
+				echo "hg update"
+				hg update
+			fi
+		popd >/dev/null
+		echo -e "Finish sync ${module}\n"
+	fi
+done
+
+echo "All repository has been synced!"

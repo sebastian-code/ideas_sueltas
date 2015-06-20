@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Google Translator
+Type=Application
+Terminal=false
+Icon[zh_CN]=/home/ted/Sources/tools/translator/translator.png
+Exec=/home/ted/.local/bin/translator
+Name[zh_CN]=Google Translator
+Icon=/home/ted/Sources/tools/translator/translator.png
