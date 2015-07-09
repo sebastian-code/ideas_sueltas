@@ -6,7 +6,7 @@ Created on 16/01/2014
 @summary: Script generico para el despliegue de software en diferentes modalidades.
 @author: Sebastian Reyes Espinosa.
 @contact: sebaslander@gmail.com
-@organization: Técnica Humana S.A.S. 
+@organization: Técnica Humana S.A.S.
 @version: v0.1
 '''
 
@@ -21,9 +21,9 @@ def str_install():
         install_rpm()
 
 def validate_os():
-    
+
     import platform
-    
+
     os = platform.system()
     if os == 'Linux':
         distro = platform.linux_distribution()[0].lower().replace('"', '')
@@ -40,15 +40,17 @@ def validate_os():
         else:
             return is_deb, is_rpm
     else:
-        print 'Este instalador solo es adecuado para despliegues de la plataforma en'
-        print 'entornos Linux, el instalador se cerrara por un error de incompatibilidad con'
-        print 'su sistema operativo.'
-        print 'Por favor, verifique las condiciones de su sistema operativo e intente correr el'
-        print 'instalador nuevamente.'
+        print('''Este instalador solo es adecuado para despliegues de la
+        plataforma en entornos Linux, el instalador se cerrara por un error de
+        incompatibilidad con su sistema operativo.
+
+        Por favor, verifique las condiciones de su sistema operativo e intente
+        correr el instalador nuevamente.
+        ''')
         sys.exit(1)
 
+
 def validate_py():
-    
     py_ver = sys.version[:5]
     print "Python Version =", py_ver
     if py_ver[:3] == '2.7':
@@ -61,15 +63,19 @@ def validate_py():
         print '2.7+ de Python'
         print ''
         sys.exit(1)
-        
+
+
 def install_deb():
     pass
+
 
 def install_rpm():
     pass
 
+
 def clearScreen():
-    os.system('cls' if os.name=='nt' else 'clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 
 if __name__ == '__main__':
     validate_py()
