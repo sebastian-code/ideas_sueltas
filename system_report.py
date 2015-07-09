@@ -3,7 +3,8 @@
 '''
 
 '''
-html_output = ""
+html_output = open('sys_report', 'w')
+'''
 GOG_SYSTEM_REPORT_VERSION = "1.1"
 ap() {
   html_output=$html_output$1
@@ -108,3 +109,4 @@ html_footer
 echo -e "${html_output}" > "`xdg-user-dir DESKTOP`/`hostname`_`date +"%H_%M_%d_%m_%Y"`.html"
 echo "Done! Your report is in: `xdg-user-dir DESKTOP`/`hostname`_`date +"%H_%M_%d_%m_%Y"`.html"
 exit 0
+'''
