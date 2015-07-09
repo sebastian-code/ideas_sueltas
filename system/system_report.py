@@ -3,58 +3,110 @@
 '''
 
 '''
-html_output = open('sys_report', 'w')
+import platform
+import os
+import subprocess
+import shlex
+
+# uname attributes: system, node, release, version, machine, processor
+datos_sistema = platform.uname()
+
+
+def nom_proc():
+    cmd = "cat /proc/cpuinfo | grep 'model name' | head -n 1 | sed 's/model name.*: //g'"
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    temp = process.communicate()[0]
+    print(temp)
+
+
+def vel_proc():
+    return str(os.system("cat /proc/cpuinfo | grep 'cpu MHz' | head -n 1 | sed 's/cpu MHz.*: //g'"))
+
+
+def num_nucleos():
+    return str(os.system("cat /proc/cpuinfo | grep 'cpu cores' | head -n 1 | sed 's/cpu MHz.*: //g'"))
+
+'''for i in os.confstr_names:
+    if os.confstr(i):
+        print(i, os.confstr(i))
 '''
-GOG_SYSTEM_REPORT_VERSION = "1.1"
-ap() {
-  html_output=$html_output$1
-}
 
-table_row() {
-  ap "<tr><td>${1}</td><td>${2}</td></tr>"
-}
+'''for i in os.sysconf_names:
+    if os.sysconf(i):
+        print(i, os.sysconf(i))
+'''
 
-html_style() {
-  ap "<style>\n"
-  ap "tr > td:first-child { font-weight:bold; }"
-  ap "</style>\n"
-}
 
-html_header() {
-  ap "<html>\n<head>"
-  ap "<title>"$USER"@"`hostname`"</title>"
-  html_style
-  ap "</head>\n<body>"
-}
+def reporte(arg):
+    archivo_reporte.write(arg)
 
-html_footer() {
-  ap "\n</body>\n</html>"
-}
 
-basic_information() {
-  ap "<h2>"`hostname`"</h2>"
-  ap "GOG.com System Report: ${GOG_SYSTEM_REPORT_VERSION}"
-  ap "<h3>System Configuration</h3>\n"
-  ap "<table border=0>"
-  table_row "Hostname:" `hostname`
-  distro=`lsb_release -sd`
-  table_row "Distribution:" "${distro}"
-  table_row "Kernel: " "`uname --kernel-release`"
-  table_row "Architecture: " `uname -m`
-  ap "</table>"
-}
+def header():
+    reporte('''<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Reporte del Sistema Local Linux</title>
+        <style>
+            tr > td:first-child { font-weight:bold; }
+        </style>
+    </head>
+    <body>''')
 
+
+def linea_tabla(arg1, arg2):
+    reporte('''
+        <tr><td>{0}</td><td>{1}</td></tr>'''.format(arg1, arg2))
+
+
+def footer():
+    reporte('''
+    </body>
+</html>
+    ''')
+
+
+def informacion_basica():
+    reporte('''
+        <h2>{}@{}</h2>
+        <h3>Configuracion del Sistema</h3>
+        <table border=0>'''.format(os.getlogin(), datos_sistema.node))
+    linea_tabla('Nombre del Host:', datos_sistema.node)
+    linea_tabla('Distribucion:', datos_sistema.version)
+    linea_tabla('Kernel:', datos_sistema.release)
+    linea_tabla('Arquitectura:', datos_sistema.machine)
+    reporte('</table>')
+
+
+def informacion_hw():
+    reporte('''
+        <h3>Hardware Overview</h3>
+        <h4>Processor</h4>
+        <table border=0>''')
+    linea_tabla('Nombre del Procesador:', nom_proc)
+    linea_tabla('Velocidad del Procesador:', vel_proc)
+    linea_tabla('Numero de Nucleos:', num_nucleos)
+    linea_tabla('Procesos en Paralelo:', os.cpu_count())
+    reporte('</table>')
+    reporte('<h4>Graphics</h4>')
+    reporte('<table border=0>')
+
+nom_proc()
+'''
+archivo_reporte = open('sys_report.html', 'a+')
+
+header()
+informacion_basica()
+informacion_hw()
+footer()
+
+archivo_reporte.close()
+'''
+#################################################################################
+'''
 hardware_overview() {
-  ap "<h3>Hardware Overview</h3>\n"
-  ap "<h4>Processor</h4>\n"
-  ap "<table border=0>"
-  table_row "Processor Name:" "`cat /proc/cpuinfo | grep "model name" | head -n 1 | sed 's/model name.*: //g'`"
-  table_row "Processor Speed:" "`cat /proc/cpuinfo | grep "cpu MHz" | head -n 1 | sed 's/cpu MHz.*: //g'`"
-  table_row "Processor Cores:" `cat /proc/cpuinfo | grep "cpu cores" | head -n 1 | sed 's/cpu cores.*: //g'`
-  ap "</table>"
 
-  ap "<h4>Graphics</h4>"
-  ap "<table border=0>"
+  ap ""
+  ap ""
   table_row "Model: " "`lspci | grep VGA | sed 's/.*VGA compatible controller://g'`"
   table_row "Driver Module:" "<pre>`lsmod | grep 'fglrx\\|nvidia\\|i915\\|i965\\|intel_agp\\|r200\\|r300\\|r600\\|swrast\\|svga\\|radeon\\|noveau'`</pre>"
   table_row "Tests: " "`glxinfo 2>&1 | grep -i 'direct rendering'`"
