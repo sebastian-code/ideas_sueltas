@@ -20,14 +20,15 @@ $ ./net_devs_2.py  -i wlan0
 wlan0: 146.100307465 MiB 12.9777050018 MiB
 '''
 
+
 def netdevs(iface=None):
     ''' RX and TX bytes for each of the network devices '''
 
     with open('/proc/net/dev') as f:
         net_dump = f.readlines()
 
-    device_data={}
-    data = namedtuple('data',['rx','tx'])
+    device_data = {}
+    data = namedtuple('data', ['rx', 'tx'])
     for line in net_dump[2:]:
         line = line.split(':')
         if not iface:
@@ -40,14 +41,17 @@ def netdevs(iface=None):
                                                     float(line[1].split()[8])/(1024.0*1024.0))
     return device_data
 
-if __name__=='__main__':
+if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description='Network Interface Usage Monitor')
-    parser.add_argument('-i','--interface', dest='iface',
-                        help='Network interface')
+    parser = argparse.ArgumentParser(
+        description='Network Interface Usage Monitor')
+    parser.add_argument('-i', '--interface',
+                        dest='iface', help='Network interface')
 
     args = parser.parse_args()
 
-    netdevs = netdevs(iface = args.iface)
+    netdevs = netdevs(iface=args.iface)
     for dev in netdevs.keys():
-        print('{0}: {1} MiB {2} MiB'.format(dev, netdevs[dev].rx, netdevs[dev].tx))
+        print('{0}: {1} MiB {2} MiB'.format(dev,
+                                            netdevs[dev].rx,
+                                            netdevs[dev].tx))
