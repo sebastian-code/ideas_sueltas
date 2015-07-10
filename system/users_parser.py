@@ -5,6 +5,8 @@ Print all the users and their login shells
 import pwd
 
 # Get the users from /etc/passwd
+
+
 def getusers():
     users = pwd.getpwall()
     for user in users:
