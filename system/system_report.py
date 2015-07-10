@@ -6,25 +6,54 @@
 import platform
 import os
 import subprocess
-import shlex
 
 # uname attributes: system, node, release, version, machine, processor
-datos_sistema = platform.uname()
+# datos_sistema = platform.uname()
 
 
 def nom_proc():
-    cmd = "cat /proc/cpuinfo | grep 'model name' | head -n 1 | sed 's/model name.*: //g'"
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-    temp = process.communicate()[0]
-    print(temp)
+    # "cat /proc/cpuinfo | grep 'model name' | head -n 1 | sed 's/model name.*: //g'"
+    p1 = subprocess.Popen(['cat', '/proc/cpuinfo'], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['grep', 'model name'], stdin=p1.stdout,
+                          stdout=subprocess.PIPE)
+    p3 = subprocess.Popen(['head', '-n 1'], stdin=p2.stdout,
+                          stdout=subprocess.PIPE)
+    p4 = subprocess.Popen(['sed', 's/model name.*: //g'], stdin=p3.stdout,
+                          stdout=subprocess.PIPE)
+    p1.stdout.close()
+    p2.stdout.close()
+    p3.stdout.close()
+    return str(p4.communicate()[0])[2:-3]
 
 
 def vel_proc():
-    return str(os.system("cat /proc/cpuinfo | grep 'cpu MHz' | head -n 1 | sed 's/cpu MHz.*: //g'"))
+    # os.system("cat /proc/cpuinfo | grep 'cpu MHz' | head -n 1 | sed 's/cpu MHz.*: //g'")
+    p1 = subprocess.Popen(['cat', '/proc/cpuinfo'], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['grep', 'cpu MHz'], stdin=p1.stdout,
+                          stdout=subprocess.PIPE)
+    p3 = subprocess.Popen(['head', '-n 1'], stdin=p2.stdout,
+                          stdout=subprocess.PIPE)
+    p4 = subprocess.Popen(['sed', 's/cpu MHz.*: //g'], stdin=p3.stdout,
+                          stdout=subprocess.PIPE)
+    p1.stdout.close()
+    p2.stdout.close()
+    p3.stdout.close()
+    return str(p4.communicate()[0])[2:-3]
 
 
 def num_nucleos():
-    return str(os.system("cat /proc/cpuinfo | grep 'cpu cores' | head -n 1 | sed 's/cpu MHz.*: //g'"))
+    # os.system("cat /proc/cpuinfo | grep 'cpu cores' | head -n 1 | sed 's/cpu MHz.*: //g'")
+    p1 = subprocess.Popen(['cat', '/proc/cpuinfo'], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['grep', 'cpu cores'], stdin=p1.stdout,
+                          stdout=subprocess.PIPE)
+    p3 = subprocess.Popen(['head', '-n 1'], stdin=p2.stdout,
+                          stdout=subprocess.PIPE)
+    p4 = subprocess.Popen(['sed', 's/cpu cores.*: //g'], stdin=p3.stdout,
+                          stdout=subprocess.PIPE)
+    p1.stdout.close()
+    p2.stdout.close()
+    p3.stdout.close()
+    return str(p4.communicate()[0])[2:-3]
 
 '''for i in os.confstr_names:
     if os.confstr(i):
@@ -69,28 +98,26 @@ def informacion_basica():
     reporte('''
         <h2>{}@{}</h2>
         <h3>Configuracion del Sistema</h3>
-        <table border=0>'''.format(os.getlogin(), datos_sistema.node))
-    linea_tabla('Nombre del Host:', datos_sistema.node)
-    linea_tabla('Distribucion:', datos_sistema.version)
-    linea_tabla('Kernel:', datos_sistema.release)
-    linea_tabla('Arquitectura:', datos_sistema.machine)
+        <table border=0>'''.format(os.getlogin(), platform.node()))
+    linea_tabla('Nombre del Host:', platform.node())
+    linea_tabla('Distribucion:', (platform.linux_distribution()[0],
+                                  platform.linux_distribution()[1]))
+    linea_tabla('Kernel:', platform.release())
+    linea_tabla('Arquitectura:', platform.machine())
     reporte('</table>')
 
 
 def informacion_hw():
     reporte('''
-        <h3>Hardware Overview</h3>
-        <h4>Processor</h4>
+        <h3>Configuracion de Hardware</h3>
+        <h4>Procesador</h4>
         <table border=0>''')
-    linea_tabla('Nombre del Procesador:', nom_proc)
-    linea_tabla('Velocidad del Procesador:', vel_proc)
-    linea_tabla('Numero de Nucleos:', num_nucleos)
+    linea_tabla('Nombre del Procesador:', nom_proc())
+    linea_tabla('Velocidad del Procesador:', vel_proc())
+    linea_tabla('Numero de Nucleos:', num_nucleos())
     linea_tabla('Procesos en Paralelo:', os.cpu_count())
     reporte('</table>')
-    reporte('<h4>Graphics</h4>')
-    reporte('<table border=0>')
 
-nom_proc()
 '''
 archivo_reporte = open('sys_report.html', 'a+')
 
@@ -105,8 +132,8 @@ archivo_reporte.close()
 '''
 hardware_overview() {
 
-  ap ""
-  ap ""
+  ap "<h4>Graphics</h4>"
+  ap "<table border=0>"
   table_row "Model: " "`lspci | grep VGA | sed 's/.*VGA compatible controller://g'`"
   table_row "Driver Module:" "<pre>`lsmod | grep 'fglrx\\|nvidia\\|i915\\|i965\\|intel_agp\\|r200\\|r300\\|r600\\|swrast\\|svga\\|radeon\\|noveau'`</pre>"
   table_row "Tests: " "`glxinfo 2>&1 | grep -i 'direct rendering'`"
