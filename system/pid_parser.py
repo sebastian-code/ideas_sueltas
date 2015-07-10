@@ -2,8 +2,9 @@
  List of all process IDs currently active
 """
 
-from __future__ import print_function
 import os
+
+
 def process_list():
 
     pids = []
@@ -14,7 +15,7 @@ def process_list():
     return pids
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
 
     pids = process_list()
     print('Total number of running processes:: {0}'.format(len(pids)))
