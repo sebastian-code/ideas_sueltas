@@ -117,6 +117,8 @@ def informacion_hw():
     linea_tabla('Numero de Nucleos:', num_nucleos())
     linea_tabla('Procesos en Paralelo:', os.cpu_count())
     reporte('</table>')
+    reporte('<h4>Graphics</h4>')
+    reporte('<table border=0>')
 
 '''
 archivo_reporte = open('sys_report.html', 'a+')
