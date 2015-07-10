@@ -1,13 +1,15 @@
+#! /usr/bin/python3
+# -*- coding:utf-8 -*-
+
 """
 Utility to play around with users and passwords on a Linux system.
 a first use of the argparse module to implement this feature in by extending
 the previous listing
 """
-
-from __future__ import print_function
 import pwd
 import argparse
 import os
+
 
 def read_login_defs():
 
@@ -27,6 +29,7 @@ def read_login_defs():
 
     return uid_min, uid_max
 
+
 # Get the users from /etc/passwd
 def getusers(no_system=False):
 
@@ -45,12 +48,12 @@ def getusers(no_system=False):
         else:
             print('{0}:{1}'.format(user.pw_name, user.pw_shell))
 
-if __name__=='__main__':
+if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='User/Password Utility')
 
-    parser.add_argument('--no-system', action='store_true',dest='no_system',
-                        default = False, help='Specify to omit system users')
+    parser.add_argument('--no-system', action='store_true', dest='no_system',
+                        default=False, help='Specify to omit system users')
 
     args = parser.parse_args()
     getusers(args.no_system)
