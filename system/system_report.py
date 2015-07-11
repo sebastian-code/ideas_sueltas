@@ -7,12 +7,9 @@ import platform
 import os
 import subprocess
 
-# uname attributes: system, node, release, version, machine, processor
-# datos_sistema = platform.uname()
 
-
+# cat /proc/cpuinfo | grep 'model name' | head -n 1 | sed 's/model name.*: //g'
 def nom_proc():
-    # "cat /proc/cpuinfo | grep 'model name' | head -n 1 | sed 's/model name.*: //g'"
     p1 = subprocess.Popen(['cat', '/proc/cpuinfo'], stdout=subprocess.PIPE)
     p2 = subprocess.Popen(['grep', 'model name'], stdin=p1.stdout,
                           stdout=subprocess.PIPE)
@@ -26,8 +23,8 @@ def nom_proc():
     return str(p4.communicate()[0])[2:-3]
 
 
+# cat /proc/cpuinfo | grep 'cpu MHz' | head -n 1 | sed 's/cpu MHz.*: //g'
 def vel_proc():
-    # os.system("cat /proc/cpuinfo | grep 'cpu MHz' | head -n 1 | sed 's/cpu MHz.*: //g'")
     p1 = subprocess.Popen(['cat', '/proc/cpuinfo'], stdout=subprocess.PIPE)
     p2 = subprocess.Popen(['grep', 'cpu MHz'], stdin=p1.stdout,
                           stdout=subprocess.PIPE)
@@ -41,8 +38,8 @@ def vel_proc():
     return str(p4.communicate()[0])[2:-3]
 
 
+# cat /proc/cpuinfo | grep 'cpu cores' | head -n 1 | sed 's/cpu MHz.*: //g'
 def num_nucleos():
-    # os.system("cat /proc/cpuinfo | grep 'cpu cores' | head -n 1 | sed 's/cpu MHz.*: //g'")
     p1 = subprocess.Popen(['cat', '/proc/cpuinfo'], stdout=subprocess.PIPE)
     p2 = subprocess.Popen(['grep', 'cpu cores'], stdin=p1.stdout,
                           stdout=subprocess.PIPE)
@@ -55,16 +52,41 @@ def num_nucleos():
     p3.stdout.close()
     return str(p4.communicate()[0])[2:-3]
 
-'''for i in os.confstr_names:
-    if os.confstr(i):
-        print(i, os.confstr(i))
-'''
 
-'''for i in os.sysconf_names:
-    if os.sysconf(i):
-        print(i, os.sysconf(i))
-'''
+# lspci | grep VGA | sed 's/.*VGA compatible controller://g'
+def vga_modelo():
+    p1 = subprocess.Popen('lspci', stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['grep', 'VGA'], stdin=p1.stdout,
+                          stdout=subprocess.PIPE)
+    p3 = subprocess.Popen(['sed', 's/.*VGA compatible controller://g'],
+                          stdin=p2.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()
+    p2.stdout.close()
+    return str(p3.communicate()[0])[3:-12]
 
+
+# lsmod | grep 'fglrx\\|nvidia\\|i915\\|i965\\|intel_agp\\|r200\\|r300\\|r600\\|swrast\\|svga\\|radeon\\|noveau'
+def vga_driver():
+    p1 = subprocess.Popen('lsmod', stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['grep', 'fglrx\\|nvidia\\|i915\\|i965\\|intel_agp\\|r200\\|r300\\|r600\\|swrast\\|svga\\|radeon\\|noveau'],
+                          stdin=p1.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()
+    return str(p2.communicate()[0])[2:-3]
+
+
+# glxinfo 2>&1 | grep -i 'direct rendering'
+def vga_rendering():
+    p1 = subprocess.Popen(['glxinfo'], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['grep', '-i', 'direct rendering'],
+                          stdin=p1.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()
+    return str(p2.communicate()[0])[2:-3]
+
+
+# xrandr
+def vga_displays():
+    p1 = subprocess.Popen('xrandr', stdout=subprocess.PIPE)
+    return str(p1.communicate()[0])
 
 def reporte(arg):
     archivo_reporte.write(arg)
@@ -107,7 +129,7 @@ def informacion_basica():
     reporte('</table>')
 
 
-def informacion_hw():
+def informacion_cpu():
     reporte('''
         <h3>Configuracion de Hardware</h3>
         <h4>Procesador</h4>
@@ -117,30 +139,43 @@ def informacion_hw():
     linea_tabla('Numero de Nucleos:', num_nucleos())
     linea_tabla('Procesos en Paralelo:', os.cpu_count())
     reporte('</table>')
-    reporte('<h4>Graphics</h4>')
-    reporte('<table border=0>')
+
+
+def informacion_graph():
+    reporte('''
+        <h4>Graphics</h4>
+        <table border=0>
+    ''')
+    linea_tabla('Modelo:', vga_modelo())
+    linea_tabla('Driver:', vga_driver())
+    linea_tabla('Rendering:', vga_rendering())
+    linea_tabla('Displays:', vga_displays())
+    reporte('</table>')
 
 '''
+for i in os.confstr_names:
+    if os.confstr(i):
+        print(i, os.confstr(i))
+
+
+for i in os.sysconf_names:
+    if os.sysconf(i):
+        print(i, os.sysconf(i))
+'''
+
 archivo_reporte = open('sys_report.html', 'a+')
 
 header()
 informacion_basica()
-informacion_hw()
+informacion_cpu()
+informacion_graph()
 footer()
 
 archivo_reporte.close()
-'''
+
 #################################################################################
 '''
 hardware_overview() {
-
-  ap "<h4>Graphics</h4>"
-  ap "<table border=0>"
-  table_row "Model: " "`lspci | grep VGA | sed 's/.*VGA compatible controller://g'`"
-  table_row "Driver Module:" "<pre>`lsmod | grep 'fglrx\\|nvidia\\|i915\\|i965\\|intel_agp\\|r200\\|r300\\|r600\\|swrast\\|svga\\|radeon\\|noveau'`</pre>"
-  table_row "Tests: " "`glxinfo 2>&1 | grep -i 'direct rendering'`"
-  table_row "Display:" "<pre>`xrandr`</pre>"
-  ap "</table>"
 
   ap "<h4>Sound</h4>"
   ap "<table border=0>"
