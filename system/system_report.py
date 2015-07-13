@@ -72,7 +72,7 @@ def vga_driver():
                           stdin=p1.stdout, stdout=subprocess.PIPE)
     p1.stdout.close()
     st = str(p2.communicate()[0])[2:-3].replace('\\n', '<br />')
-    return st  # .split('\\n')
+    return st
 
 
 # glxinfo 2>&1 | grep -i 'direct rendering'
@@ -90,6 +90,27 @@ def vga_displays():
     st = str(p1.communicate()[0])[2:-3].replace('\\n', '<br />')
     return st
 
+
+# lspci | grep Audio | sed 's/.*Audio device://g'
+def snd_modelo():
+    p1 = subprocess.Popen('lspci', stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['grep', 'Audio'], stdin=p1.stdout,
+                          stdout=subprocess.PIPE)
+    p3 = subprocess.Popen(['sed', 's/.*Audio device://g'],
+                          stdin=p2.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()
+    p2.stdout.close()
+    return str(p3.communicate()[0])[3:-3]
+
+
+# lsmod | grep 'snd'
+def snd_driver():
+    p1 = subprocess.Popen('lsmod', stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['grep', 'snd'],
+                          stdin=p1.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()
+    st = str(p2.communicate()[0])[2:-3].replace('\\n', '<br />')
+    return st
 
 def reporte(arg):
     archivo_reporte.write(arg)
@@ -161,7 +182,20 @@ def informacion_snd():
         <h4>Sound</h4>
         <table border=0
     ''')
-    linea_tabla()
+    linea_tabla('Modelo:', snd_modelo())
+    linea_tabla('Driver:', '<pre>{}</pre>'.format(snd_driver()))
+    reporte('</table>')
+
+if __name__ == '__main__':
+    archivo_reporte = open('sys_report.html', 'a+')
+    header()
+    informacion_basica()
+    informacion_cpu()
+    informacion_graph()
+    informacion_snd()
+    footer()
+    archivo_reporte.close()
+
 
 '''
 for i in os.confstr_names:
@@ -173,31 +207,13 @@ for i in os.sysconf_names:
     if os.sysconf(i):
         print(i, os.sysconf(i))
 '''
-# [print(i) for i in vga_displays()]
-
-archivo_reporte = open('sys_report.html', 'a+')
-
-header()
-informacion_basica()
-informacion_cpu()
-informacion_graph()
-footer()
-
-archivo_reporte.close()
-
 #################################################################################
 '''
-hardware_overview() {
-
-  ap "<h4>Sound</h4>"
-  ap "<table border=0>"
-  table_row "Model: " "`lspci | grep Audio | sed 's/.*Audio device://g'`"
-  table_row "Driver Module:" "<pre>`lsmod | grep 'snd'`</pre>"
-  ap "</table>"
 
   ap "<h4>Memory</h4>"
   ap "<table border=0>"
   table_row "Memory Total: " "`grep MemTotal /proc/meminfo | sed 's/MemTotal: //g'`"
+  table_row "Memory Free: " "`grep MemFree /proc/meminfo | sed 's/MemFree: //g'`"
   table_row "Swap Total: " "`grep SwapTotal /proc/meminfo | sed 's/SwapTotal: //g'`"
   table_row "Swap Free: " "`grep SwapFree /proc/meminfo | sed 's/SwapFree: //g'`"
   ap "</table>"
