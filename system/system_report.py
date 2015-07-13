@@ -65,13 +65,14 @@ def vga_modelo():
     return str(p3.communicate()[0])[3:-12]
 
 
-# lsmod | grep 'fglrx\\|nvidia\\|i915\\|i965\\|intel_agp\\|r200\\|r300\\|r600\\|swrast\\|svga\\|radeon\\|noveau'
+# lsmod | grep 'fglrx | nvidia | i915 | i965 | intel_agp | r200 | r300 | r600 | swrast | svga | radeon | noveau'
 def vga_driver():
     p1 = subprocess.Popen('lsmod', stdout=subprocess.PIPE)
     p2 = subprocess.Popen(['grep', 'fglrx\\|nvidia\\|i915\\|i965\\|intel_agp\\|r200\\|r300\\|r600\\|swrast\\|svga\\|radeon\\|noveau'],
                           stdin=p1.stdout, stdout=subprocess.PIPE)
     p1.stdout.close()
-    return str(p2.communicate()[0])[2:-3]
+    st = str(p2.communicate()[0])[2:-3].replace('\\n', '<br />')
+    return st  # .split('\\n')
 
 
 # glxinfo 2>&1 | grep -i 'direct rendering'
@@ -86,7 +87,9 @@ def vga_rendering():
 # xrandr
 def vga_displays():
     p1 = subprocess.Popen('xrandr', stdout=subprocess.PIPE)
-    return str(p1.communicate()[0])
+    st = str(p1.communicate()[0])[2:-3].replace('\\n', '<br />')
+    return st
+
 
 def reporte(arg):
     archivo_reporte.write(arg)
@@ -147,10 +150,18 @@ def informacion_graph():
         <table border=0>
     ''')
     linea_tabla('Modelo:', vga_modelo())
-    linea_tabla('Driver:', vga_driver())
+    linea_tabla('Driver:', '''<pre>{}</pre>'''.format(vga_driver()))
     linea_tabla('Rendering:', vga_rendering())
-    linea_tabla('Displays:', vga_displays())
+    linea_tabla('Displays:', '<pre>{}</pre>'.format(vga_displays()))
     reporte('</table>')
+
+
+def informacion_snd():
+    reporte('''
+        <h4>Sound</h4>
+        <table border=0
+    ''')
+    linea_tabla()
 
 '''
 for i in os.confstr_names:
@@ -162,6 +173,7 @@ for i in os.sysconf_names:
     if os.sysconf(i):
         print(i, os.sysconf(i))
 '''
+# [print(i) for i in vga_displays()]
 
 archivo_reporte = open('sys_report.html', 'a+')
 
