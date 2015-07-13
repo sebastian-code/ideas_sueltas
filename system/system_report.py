@@ -308,12 +308,3 @@ if __name__ == '__main__':
     informacion_kernel()
     footer()
     archivo_reporte.close()
-
-#################################################################################
-'''
-
-
-echo -e "${html_output}" > "`xdg-user-dir DESKTOP`/`hostname`_`date +"%H_%M_%d_%m_%Y"`.html"
-echo "Done! Your report is in: `xdg-user-dir DESKTOP`/`hostname`_`date +"%H_%M_%d_%m_%Y"`.html"
-exit 0
-'''
