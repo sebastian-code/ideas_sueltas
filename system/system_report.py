@@ -136,6 +136,29 @@ def redes():
     return st
 
 
+# cat /etc/apt/sources.list
+def sw_sources():
+    p1 = subprocess.Popen(['cat', '/etc/apt/sources.list'],
+                          stdout=subprocess.PIPE)
+    st = str(p1.communicate()[0])[2:-3].replace('\\n', '<br />')
+    return st
+
+
+# dpkg-query --show | sed 's/\n/<\/br>/g'
+def sw_instalado():
+    p1 = subprocess.Popen(['dpkg-query', '--show'], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['sed', 's/\\n/<\/br>/g'],
+                          stdin=p1.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()
+    st = str(p2.communicate()[0])[2:-3].replace('\\n', '<br />')
+    return st
+
+
+# lsmod
+def kernel():
+    p1 = subprocess.Popen('lsmod', stdout=subprocess.PIPE)
+    st = str(p1.communicate()[0])[2:-3].replace('\\n', '<br />')
+    return st
 ##########################################
 def reporte(arg):
     archivo_reporte.write(arg)
@@ -151,6 +174,9 @@ def header():
         </style>
     </head>
     <body>''')
+    reporte('''
+        <h2>Nombre del usuario e identificador de red</h2>
+        <h2>{}@{}</h2>'''.format(os.getlogin(), platform.node()))
 
 
 def linea_tabla(arg1, arg2):
@@ -167,9 +193,8 @@ def footer():
 
 def informacion_basica():
     reporte('''
-        <h2>{}@{}</h2>
-        <h3>Configuracion del Sistema</h3>
-        <table border=0>'''.format(os.getlogin(), platform.node()))
+        <h3>Informacion general del Sistema</h3>
+        <table border=0>''')
     linea_tabla('Nombre del Host:', platform.node())
     linea_tabla('Distribucion:', (platform.linux_distribution()[0],
                                   platform.linux_distribution()[1]))
@@ -242,8 +267,35 @@ def informacion_redes():
     reporte('</table>')
 
 
+def informacion_sw():
+    reporte('''
+        <h3>Informacion del Software</h3>
+        <h4>Fuentes del Software</h4>
+        <table border=0>''')
+    linea_tabla('', '<pre>{}</pre>'.format(sw_sources()))
+    reporte('</table>')
+    reporte('''
+        <h4>Software Instalado</h4>
+        <table border=0>''')
+    linea_tabla('', '<pre>{}</pre>'.format(sw_instalado()))
+    reporte('</table>')
+
+
+def informacion_kernel():
+    reporte('''
+        <h3>Informacion del Kernel</h3>
+        <h4>Resumen de Modulos del Kernel</h4>
+        <table border=0>''')
+    linea_tabla('', '<pre>{}</pre>'.format(kernel()))
+    reporte('</table>')
+
+import time
+
 if __name__ == '__main__':
-    archivo_reporte = open('sys_report.html', 'a+')
+    os.chdir(os.path.expanduser('~'))
+    fecha = time.strftime('%Y-%m-%d_') + time.strftime('%H-%M-%S')
+
+    archivo_reporte = open('sys_report_{}.html'.format(fecha), 'a+')
     header()
     informacion_basica()
     informacion_cpu()
@@ -252,26 +304,14 @@ if __name__ == '__main__':
     informacion_mem()
     informacion_part()
     informacion_redes()
+    informacion_sw()
+    informacion_kernel()
     footer()
     archivo_reporte.close()
 
 #################################################################################
 '''
 
-software_overview() {
-  ap "<h3>Software Overview</h3>\n"
-  ap "<h4>/etc/apt/sources.list</h4>"
-  ap "<pre>`cat /etc/apt/sources.list`</pre>"
-
-  ap "<h4>Installed packages</h4>\n"
-  ap "<pre>`dpkg-query --show | sed 's/\n/<\/br>/g'`</pre>"
-}
-
-modules_overview() {
-  ap "<h3>Kernel Modules Overview</h3>\n"
-  ap "<h4>lsmod</h4>"
-  ap "<pre>`lsmod`</pre>"
-}
 
 echo -e "${html_output}" > "`xdg-user-dir DESKTOP`/`hostname`_`date +"%H_%M_%d_%m_%Y"`.html"
 echo "Done! Your report is in: `xdg-user-dir DESKTOP`/`hostname`_`date +"%H_%M_%d_%m_%Y"`.html"
