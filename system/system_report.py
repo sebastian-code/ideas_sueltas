@@ -112,6 +112,31 @@ def snd_driver():
     st = str(p2.communicate()[0])[2:-3].replace('\\n', '<br />')
     return st
 
+
+# grep MemTotal /proc/meminfo | sed 's/MemTotal: //g'
+def mem_query(arg):
+    p1 = subprocess.Popen(['grep', '{}'.format(arg), '/proc/meminfo'],
+                          stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(['sed', 's/{}: //g'.format(arg)], stdin=p1.stdout,
+                          stdout=subprocess.PIPE)
+    return str(p2.communicate()[0])[2:-3]
+
+
+# df -h
+def particionado():
+    p1 = subprocess.Popen(['df', '-h'], stdout=subprocess.PIPE)
+    st = str(p1.communicate()[0])[2:-3].replace('\\n', '<br />')
+    return st
+
+
+# ifconfig
+def redes():
+    p1 = subprocess.Popen('ifconfig', stdout=subprocess.PIPE)
+    st = str(p1.communicate()[0])[2:-3].replace('\\n', '<br />')
+    return st
+
+
+##########################################
 def reporte(arg):
     archivo_reporte.write(arg)
 
@@ -167,7 +192,7 @@ def informacion_cpu():
 
 def informacion_graph():
     reporte('''
-        <h4>Graphics</h4>
+        <h4>Graficos</h4>
         <table border=0>
     ''')
     linea_tabla('Modelo:', vga_modelo())
@@ -179,12 +204,43 @@ def informacion_graph():
 
 def informacion_snd():
     reporte('''
-        <h4>Sound</h4>
+        <h4>Sonidos</h4>
         <table border=0
     ''')
     linea_tabla('Modelo:', snd_modelo())
     linea_tabla('Driver:', '<pre>{}</pre>'.format(snd_driver()))
     reporte('</table>')
+
+
+def informacion_mem():
+    reporte('''
+        <h4>Memoria</h4>
+        <table border=0>
+    ''')
+    linea_tabla('RAM Total:', mem_query('MemTotal'))
+    linea_tabla('RAM Libre:', mem_query('MemFree'))
+    linea_tabla('Swap Total:', mem_query('SwapTotal'))
+    linea_tabla('Swap Libre:', mem_query('SwapFree'))
+    reporte('</table>')
+
+
+def informacion_part():
+    reporte('''
+        <h4>Particiones</h4>
+        <table border=0>
+    ''')
+    linea_tabla('', '<pre>{}</pre>'.format(particionado()))
+    reporte('</table>')
+
+
+def informacion_redes():
+    reporte('''
+        <h4>Interfaces de Red</h4>
+        <table border=0>
+    ''')
+    linea_tabla('', '<pre>{}</pre>'.format(redes()))
+    reporte('</table>')
+
 
 if __name__ == '__main__':
     archivo_reporte = open('sys_report.html', 'a+')
@@ -193,46 +249,19 @@ if __name__ == '__main__':
     informacion_cpu()
     informacion_graph()
     informacion_snd()
+    informacion_mem()
+    informacion_part()
+    informacion_redes()
     footer()
     archivo_reporte.close()
 
-
-'''
-for i in os.confstr_names:
-    if os.confstr(i):
-        print(i, os.confstr(i))
-
-
-for i in os.sysconf_names:
-    if os.sysconf(i):
-        print(i, os.sysconf(i))
-'''
 #################################################################################
 '''
-
-  ap "<h4>Memory</h4>"
-  ap "<table border=0>"
-  table_row "Memory Total: " "`grep MemTotal /proc/meminfo | sed 's/MemTotal: //g'`"
-  table_row "Memory Free: " "`grep MemFree /proc/meminfo | sed 's/MemFree: //g'`"
-  table_row "Swap Total: " "`grep SwapTotal /proc/meminfo | sed 's/SwapTotal: //g'`"
-  table_row "Swap Free: " "`grep SwapFree /proc/meminfo | sed 's/SwapFree: //g'`"
-  ap "</table>"
-
-  ap "<h4>Partitions</h4>\n"
-  ap "<pre>`df -h`</pre>"
-  ap "<h4>Network</h4>\n"
-  ap "<pre>`ifconfig`</pre>"
-}
 
 software_overview() {
   ap "<h3>Software Overview</h3>\n"
   ap "<h4>/etc/apt/sources.list</h4>"
   ap "<pre>`cat /etc/apt/sources.list`</pre>"
-
-  ap "<h4>Installed in /opt/GOG Games</h4>\n"
-  ap "<pre>`ls -la \"/opt/GOG Games\" 2>&1`</pre>"
-  ap "<h4>Installed in /usr/games</h4>\n"
-  ap "<pre>`ls -la \"/usr/games\" | grep 'gog-' 2>&1`</pre>"
 
   ap "<h4>Installed packages</h4>\n"
   ap "<pre>`dpkg-query --show | sed 's/\n/<\/br>/g'`</pre>"
@@ -243,13 +272,6 @@ modules_overview() {
   ap "<h4>lsmod</h4>"
   ap "<pre>`lsmod`</pre>"
 }
-
-html_header
-basic_information
-hardware_overview
-modules_overview
-software_overview
-html_footer
 
 echo -e "${html_output}" > "`xdg-user-dir DESKTOP`/`hostname`_`date +"%H_%M_%d_%m_%Y"`.html"
 echo "Done! Your report is in: `xdg-user-dir DESKTOP`/`hostname`_`date +"%H_%M_%d_%m_%Y"`.html"
