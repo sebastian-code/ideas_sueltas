@@ -217,6 +217,7 @@ for i in os.sysconf_names:
   table_row "Swap Total: " "`grep SwapTotal /proc/meminfo | sed 's/SwapTotal: //g'`"
   table_row "Swap Free: " "`grep SwapFree /proc/meminfo | sed 's/SwapFree: //g'`"
   ap "</table>"
+
   ap "<h4>Partitions</h4>\n"
   ap "<pre>`df -h`</pre>"
   ap "<h4>Network</h4>\n"
