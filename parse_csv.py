@@ -37,13 +37,13 @@ def build_translation_dict(file):
     reader = csv.DictReader(open(file))
     dict = [l for l in reader][0]
     new = {}
-    for k,v in dict.items():
+    for k, v in dict.items():
         if k in LANG.keys():
             new[LANG[k]] = v
     return new
 
 if __name__ == '__main__':
-   dict = build_translation_dict(sys.argv[1])
+    dict = build_translation_dict(sys.argv[1])
 
-   for k, v in dict.items():
-       print k,v
+    for k, v in dict.items():
+        print(k, v)

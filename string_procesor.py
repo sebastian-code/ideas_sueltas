@@ -7,6 +7,7 @@ Created on 2/01/2014
 import os
 cont = 0
 
+
 def cont_line(org_file):
     global cont
     in_file = open(org_file, "r+")
@@ -14,6 +15,7 @@ def cont_line(org_file):
         cont += 1
 
     in_file.close()
+
 
 def proc_file(org_file, in_char, out_char):
     con = 0
@@ -23,9 +25,8 @@ def proc_file(org_file, in_char, out_char):
         con += 1
         print "Ejecutando procesamiento de", cont, "lineas.\n"
         print "Actualmente procesando linea No.", con
-
-        out_file.write(line.replace(in_char, out_char)) 
-        os.system('cls' if os.name=='nt' else 'clear')
+        out_file.write(line.replace(in_char, out_char))
+        os.system('cls' if os.name == 'nt' else 'clear')
 
     in_file.close()
     out_file.close()

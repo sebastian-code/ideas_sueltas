@@ -6,7 +6,7 @@
 #
 #  License :: OSI Approved :: MIT License:
 #      http://www.opensource.org/licenses/mit-license
-# 
+#
 #      Permission is hereby granted, free of charge, to any person obtaining a copy
 #      of this software and associated documentation files (the "Software"), to deal
 #      in the Software without restriction, including without limitation the rights
@@ -19,13 +19,12 @@
 #
 
 
-from . import mem_stat
-
+import mem_stat
 import unittest
 
 
 class TestMemoryStats(unittest.TestCase):
-    
+
     def setUp(self):
         (self.mem_active,
         self.mem_total,
@@ -36,13 +35,13 @@ class TestMemoryStats(unittest.TestCase):
 
     def test_mem_active(self):
         self.assertTrue(self.mem_active > 0)
-        
+
     def test_mem_total(self):
         self.assertTrue(self.mem_total > 0)
-        
+
     def test_mem_cached(self):
         self.assertTrue(self.mem_cached > 0)
-        
+
     def test_mem_free(self):
         self.assertTrue(self.mem_free > 0)
 
@@ -53,6 +52,6 @@ class TestMemoryStats(unittest.TestCase):
         self.assertTrue(self.swap_free > 0)
 
 
-if __name__ == '__main__':  
+if __name__ == '__main__':
     test_suite = unittest.TestLoader().loadTestsFromTestCase(TestMemoryStats)
     unittest.TextTestRunner(verbosity=2).run(test_suite)

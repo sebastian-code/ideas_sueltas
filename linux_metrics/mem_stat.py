@@ -6,7 +6,7 @@
 #
 #  License :: OSI Approved :: MIT License:
 #      http://www.opensource.org/licenses/mit-license
-# 
+#
 #      Permission is hereby granted, free of charge, to any person obtaining a copy
 #      of this software and associated documentation files (the "Software"), to deal
 #      in the Software without restriction, including without limitation the rights
@@ -21,13 +21,12 @@
 
 """
     mem_stat - Python Module for Memory Stats on Linux
-    
+
     requires:
     - Python 2.6+
     - Linux 2.6+
-    
-"""
 
+"""
 
 
 def mem_stats():

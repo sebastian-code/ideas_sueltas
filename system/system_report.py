@@ -1,8 +1,6 @@
 #! /usr/bin/python3
 # -*- coding:utf-8 -*-
-'''
 
-'''
 import platform
 import os
 import subprocess
@@ -159,7 +157,8 @@ def kernel():
     p1 = subprocess.Popen('lsmod', stdout=subprocess.PIPE)
     st = str(p1.communicate()[0])[2:-3].replace('\\n', '<br />')
     return st
-##########################################
+
+
 def reporte(arg):
     archivo_reporte.write(arg)
 
@@ -294,7 +293,6 @@ import time
 if __name__ == '__main__':
     os.chdir(os.path.expanduser('~'))
     fecha = time.strftime('%Y-%m-%d_') + time.strftime('%H-%M-%S')
-
     archivo_reporte = open('sys_report_{}.html'.format(fecha), 'a+')
     header()
     informacion_basica()
