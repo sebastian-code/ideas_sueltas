@@ -15,12 +15,6 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-__version__ = '0.2.7'
-
-# Some global variables we use
-source = None
-shutdown_event = None
-
 import math
 import time
 import os
@@ -30,14 +24,23 @@ import re
 import signal
 import socket
 
+
+__version__ = '0.2.7'
+
+# Some global variables we use
+source = None
+shutdown_event = None
+
 # Used for bound_interface
 socket_socket = socket.socket
 
 try:
     import xml.etree.cElementTree as ET
+
 except ImportError:
     try:
         import xml.etree.ElementTree as ET
+
     except ImportError:
         from xml.dom import minidom as DOM
         ET = None
@@ -45,39 +48,47 @@ except ImportError:
 # Begin import game to handle Python 2 and Python 3
 try:
     from urllib2 import urlopen, Request, HTTPError, URLError
+
 except ImportError:
     from urllib.request import urlopen, Request, HTTPError, URLError
 
 try:
     from Queue import Queue
+
 except ImportError:
     from queue import Queue
 
 try:
     from urlparse import urlparse
+
 except ImportError:
     from urllib.parse import urlparse
 
 try:
     from urlparse import parse_qs
+
 except ImportError:
     try:
         from urllib.parse import parse_qs
+
     except ImportError:
         from cgi import parse_qs
 
 try:
     from hashlib import md5
+
 except ImportError:
     from md5 import md5
 
 try:
     from argparse import ArgumentParser as ArgParser
+
 except ImportError:
     from optparse import OptionParser as ArgParser
 
 try:
     import builtins
+
 except ImportError:
     def print_(*args, **kwargs):
         """The new-style print function taken from

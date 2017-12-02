@@ -66,7 +66,9 @@ def main():
         'Main function'
         global Action, x, y, ping_delay, ip
         try:
-                opts, args = getopt.getopt(sys.argv[1:], "sl:d:i:f:t:h", ["from=", "to=", "help", "delay=", "ip=", "stdin", "load-file="])  # output=
+                opts, args = getopt.getopt(sys.argv[1:], "sl:d:i:f:t:h",
+                                           ["from=", "to=", "help", "delay=",
+                                            "ip=", "stdin", "load-file="])
 
         except getopt.GetoptError as err:
                 print("Error: "+str(err)+", Try --help for usage\n\n")
@@ -90,7 +92,7 @@ def main():
                         y = float(a)
 
                     except ValueError:
-                        print ("--to argument is taking only numeric values")
+                        print("--to argument is taking only numeric values")
                         sys.exit(2)
 
                 if o in ("-d", "--delay"):
@@ -103,10 +105,10 @@ def main():
                 if o in ("-i", "--ip"):
                         ip=a
                 if o in ("-l", "--load-file"):
-                        Action="file_scan"
+                        Action = "file_scan"
                         FileToScan = a
                 if o in ("-s", "--stdin"):
-                        Action="stdin_scan"
+                        Action = "stdin_scan"
 
         if len(opts) == 0:
             print("scan-network for GNU/Linux,  See --help for usage")
@@ -114,6 +116,7 @@ def main():
 
         if Action == "range_scan":
             doRangeScan()
+
         elif Action == "file_scan":
             if os.access(FileToScan, os.R_OK):
                 FileHandler = open(FileToScan, "r")
@@ -122,12 +125,14 @@ def main():
             else:
                 print("Cannot open input file "+FileToScan)
 
-        elif Action=="stdin_scan":
-            if select.select([sys.stdin,],[],[],0.0)[0]:
+        elif Action == "stdin_scan":
+            if select.select([sys.stdin,], [], [], 0.0)[0]:
                 Adresses = sys.stdin.read()
                 doListScan(Adresses)
+
             else:
                 print("STDIN is empty")
+
 
 def doListScan(inputList):
     ListOfHosts = list()
