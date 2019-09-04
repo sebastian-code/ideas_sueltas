@@ -72,11 +72,15 @@ for q in Article.objects.all():
 
 for i in range(12):
     for user in get_user_model().objects.all():
-        news = News.objects.create(
+        try:
+            news = News.objects.create(
             user=user,
             content=get_random_str(random.randint(25, 123))
-        )
-        print("Created news", news)
+            )
+            print("Created news", news)
+        
+        except Exception as e:
+            print("Upppssss, an error on News!", e)
 
 for i in range(News.objects.count() // 2):
     try:
@@ -102,7 +106,7 @@ for sender in get_user_model().objects.all():
                 recipient=sender,
                 message=get_random_str(random.randint(25, 900))
             )
-            print("Conversation created!")
+            print(f"Conversation created between {sender} and {receiver}")
 
     except Exception as e:
 	    print("Upssssss message failed")
