@@ -11,11 +11,16 @@ from bootcamp.qa.models import Question, Answer, Vote
 
 
 def get_random_str(lenght=12):
-    return "".join(random.choice(string.ascii_lowercase + string.digits + " ") for _ in range(lenght))
+    return "".join(
+        random.choice(string.ascii_lowercase + string.digits + " ")
+        for _ in range(lenght)
+    )
 
 
 def get_usr_name(lenght=10):
-    return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(lenght))
+    return "".join(
+        random.choice(string.ascii_lowercase + string.digits) for _ in range(lenght)
+    )
 
 
 def get_random_user():
@@ -31,9 +36,7 @@ for i in range(16):
     user_str = get_usr_name()
     try:
         user = get_user_model().objects.create_user(
-            username=user_str,
-            email=user_str + "@gmail.com",
-            password="fuckthis"
+            username=user_str, email=user_str + "@gmail.com", password="fuckthis"
         )
 
         print("User created")
@@ -43,9 +46,7 @@ for i in range(16):
 
 try:
     get_user_model().objects.create_user(
-        username="maestro",
-        email="maestro@gmail.com",
-        password="fuckthis"
+        username="maestro", email="maestro@gmail.com", password="fuckthis"
     )
 except:
     print("Upppssss, maestro failed.")
@@ -57,7 +58,7 @@ for i in range(62):
             status="P",
             content=get_random_str(random.randint(1023, 3823)),
             user=get_random_user(),
-            tags=random.sample(tag_set, 5)
+            tags=random.sample(tag_set, 5),
         )
 
         print("Created article", article.title)
@@ -74,11 +75,10 @@ for i in range(12):
     for user in get_user_model().objects.all():
         try:
             news = News.objects.create(
-            user=user,
-            content=get_random_str(random.randint(25, 123))
+                user=user, content=get_random_str(random.randint(25, 123))
             )
             print("Created news", news)
-        
+
         except Exception as e:
             print("Upppssss, an error on News!", e)
 
@@ -91,47 +91,60 @@ for i in range(News.objects.count() // 2):
         news.reply_this(user, text)
 
     except Exception as e:
-	    print("Upssssss answer failed")
+        print("Upssssss answer failed")
 
 for sender in get_user_model().objects.all():
     try:
-        for receiver in get_user_model().objects.all().exclude(username=sender.username):
+        for receiver in (
+            get_user_model().objects.all().exclude(username=sender.username)
+        ):
             Message.objects.create(
                 sender=sender,
                 recipient=receiver,
-                message=get_random_str(random.randint(25, 900))
+                message=get_random_str(random.randint(25, 900)),
             )
             Message.objects.create(
                 sender=receiver,
                 recipient=sender,
-                message=get_random_str(random.randint(25, 900))
+                message=get_random_str(random.randint(25, 900)),
             )
             print(f"Conversation created between {sender} and {receiver}")
 
     except Exception as e:
-	    print("Upssssss message failed")
+        print("Upssssss message failed")
 
 
 for user in get_user_model().objects.all():
     try:
         for i in range(4):
-            Question.objects.create(
+            q = Question.objects.create(
                 user=user,
                 title=get_random_str(19),
                 content=get_random_str(1500),
-                tags=random.sample(tag_set, random.randint(2, 6))
+                tags=random.sample(tag_set, random.randint(2, 6)),
             )
 
+            print(f"Somebody asked {q}")
+
     except Exception as e:
-	    print("Upssssss question failed")
+        print("Upssssss question failed")
 
 for q in Question.objects.all():
     tags_list = random.sample(tag_set, random.randint(4, 9))
     [q.tags.add(tag) for tag in tags_list]
+    print(f"Tagged {q}")
     for i in range(random.randint(5, 27)):
         try:
-            user = get_user_model().objects.exclude(username=q.user.username).order_by("?").first()
-            q.votes.update_or_create(user=user, defaults={"value": bool(random.getrandbits(1))}, )
+            user = (
+                get_user_model()
+                .objects.exclude(username=q.user.username)
+                .order_by("?")
+                .first()
+            )
+            q.votes.update_or_create(
+                user=user, defaults={"value": bool(random.getrandbits(1))},
+            )
+            print(f"Voted {q}")
 
         except Exception as e:
             print("Uppssss, can't vote", e)
@@ -142,12 +155,8 @@ for q in Question.objects.all():
 for q in Question.objects.all():
     try:
         for user in get_user_model().objects.all():
-            Answer.objects.create(
-                user=user,
-                question=q,
-                content=get_random_str(280)
-            )
+            Answer.objects.create(user=user, question=q, content=get_random_str(280))
+            print(f"Answered to {q}")
 
     except Exception as e:
         print("Uppssss, can't answer", e)
-
