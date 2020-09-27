@@ -27,29 +27,34 @@
 
 from google.appengine.ext import db
 
+
 class AccessDestination(db.Model):
     desti = db.StringProperty(required=True)
     counter = db.IntegerProperty(required=True)
+
 
 class AccessFrom(db.Model):
     fro = db.StringProperty(required=True)
     counter = db.IntegerProperty(required=True)
 
+
 def incDestiCounter(desti):
-    rec = db.get(db.Key.from_path('AccessDestination', 'D:%s' % desti))
+    rec = db.get(db.Key.from_path("AccessDestination", "D:%s" % desti))
     if not rec:
-        rec = AccessDestination(desti=desti, counter=1, key_name='D:%s' % desti)
+        rec = AccessDestination(desti=desti, counter=1, key_name="D:%s" % desti)
     else:
         rec.counter += 1
     rec.put()
 
+
 def incFroCounter(fro):
-    rec = db.get(db.Key.from_path('AccessFrom', 'F:%s' % fro))
+    rec = db.get(db.Key.from_path("AccessFrom", "F:%s" % fro))
     if not rec:
-        rec = AccessFrom(fro=fro, counter=1, key_name='F:%s' % fro)
+        rec = AccessFrom(fro=fro, counter=1, key_name="F:%s" % fro)
     else:
         rec.counter += 1
     rec.put()
+
 
 def logAccess(desti, fro):
     try:
@@ -59,6 +64,7 @@ def logAccess(desti, fro):
     except Exception:
         return False
 
+
 def listPopDesti(count):
     ls = []
     q = db.GqlQuery("select * from AccessDestination order by counter desc")
@@ -66,6 +72,7 @@ def listPopDesti(count):
     for r in results:
         ls.append((r.desti, r.counter))
     return ls
+
 
 def listFreqFro(count):
     ls = []
@@ -75,20 +82,24 @@ def listFreqFro(count):
         ls.append((r.fro, r.counter))
     return ls
 
+
 def clearDesti():
     recs = AccessDestination.all()
     for r in recs:
         r.delete()
+
 
 def clearFro():
     recs = AccessFrom.all()
     for r in recs:
         r.delete()
 
+
 def clearAll():
     clearDesti()
     clearFro()
 
-if __name__ == '__main__':
-    print hash('www.appspot.com')
-    print hash('code.google.com')
+
+if __name__ == "__main__":
+    print hash("www.appspot.com")
+    print hash("code.google.com")

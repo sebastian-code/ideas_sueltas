@@ -142,7 +142,8 @@ for q in Question.objects.all():
                 .first()
             )
             q.votes.update_or_create(
-                user=user, defaults={"value": bool(random.getrandbits(1))},
+                user=user,
+                defaults={"value": bool(random.getrandbits(1))},
             )
             print(f"Voted {q}")
 

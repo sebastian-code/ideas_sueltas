@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-s='''
+s = """
  	#982632	Window module fails to load on Xubuntu, Lubuntu	   	High	Ding Zhou 	Fix Committed
  	#988564	ubuntu-tweak 0.7.0 (oneiric/unity-2d) crashes in Unity settings	   	High	Ding Zhou 	Fix Committed
  	#990270	Ubuntu Tweak crash after install in Ubuntu 12.04 system76 laptop	   	High	Ding Zhou 	Fix Committed
@@ -16,13 +16,13 @@ s='''
  	#995135	Quicklists editor crashed when no desktop file	   	Medium	Ding Zhou 	Fix Committed
  	#996324	Add Ubuntu Overlay Scrollbars tweak	   	Low	Ding Zhou 	Fix Committed
  	#997513	Add Settings for "Show Desktop Icon in launcher"
-    '''
+    """
 
 l = []
-for line in s.split('\n'):
+for line in s.split("\n"):
     if line.strip():
-        new_line = line.split('\t')[:3]
-        new_line[0] = '    - LP:'
-        l.append(' '.join(new_line))
+        new_line = line.split("\t")[:3]
+        new_line[0] = "    - LP:"
+        l.append(" ".join(new_line))
 
-print '\n'.join(l)
+print "\n".join(l)

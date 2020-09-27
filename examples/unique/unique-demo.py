@@ -2,8 +2,10 @@
 
 from gi.repository import Gtk, Unique
 
+
 class MainWindow(Gtk.Window):
     pass
+
 
 def message_received_cb(app, command, message, time, window):
     print app, command, message, time
@@ -12,9 +14,10 @@ def message_received_cb(app, command, message, time, window):
 
     return False
 
-if __name__ == '__main__':
-    app = Unique.App(name='me.imtx.unique-demo', startup_id='')
-    
+
+if __name__ == "__main__":
+    app = Unique.App(name="me.imtx.unique-demo", startup_id="")
+
     if app.is_running():
         app.send_message(Unique.Command.ACTIVATE, Unique.MessageData())
     else:

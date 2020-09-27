@@ -7,7 +7,6 @@ telnet clients to port 1025
 from twisted.protocols import basic
 
 
-
 class MyChat(basic.LineReceiver):
     def connectionMade(self):
         print "Got new client!"
@@ -23,7 +22,7 @@ class MyChat(basic.LineReceiver):
             c.message(line)
 
     def message(self, message):
-        self.transport.write(message + '\n')
+        self.transport.write(message + "\n")
 
 
 from twisted.internet import protocol

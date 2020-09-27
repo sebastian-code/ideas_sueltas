@@ -8,6 +8,8 @@ from whois import who_is
 
 ROOT_DIR = "companies"
 create_dir(ROOT_DIR)
+
+
 def gather_info(name, url):
     robots_txt = get_robots_txt(url)
     domain = get_domain_name(url)

@@ -100,25 +100,25 @@ def checksum(source_string):
     to suggest that it gives the same answers as in_cksum in ping.c
     """
     sum = 0
-    countTo = (len(source_string)/2)*2
+    countTo = (len(source_string) / 2) * 2
     count = 0
     while count < countTo:
-        thisVal = ord(source_string[count + 1])*256 + ord(source_string[count])
+        thisVal = ord(source_string[count + 1]) * 256 + ord(source_string[count])
         sum = sum + thisVal
-        sum = sum & 0xffffffff  # Necessary?
+        sum = sum & 0xFFFFFFFF  # Necessary?
         count = count + 2
 
     if countTo < len(source_string):
         sum = sum + ord(source_string[len(source_string) - 1])
-        sum = sum & 0xffffffff  # Necessary?
+        sum = sum & 0xFFFFFFFF  # Necessary?
 
-    sum = (sum >> 16) + (sum & 0xffff)
+    sum = (sum >> 16) + (sum & 0xFFFF)
     sum = sum + (sum >> 16)
     answer = ~sum
-    answer = answer & 0xffff
+    answer = answer & 0xFFFF
 
     # Swap bytes. Bugger me if I know why.
-    answer = answer >> 8 | (answer << 8 & 0xff00)
+    answer = answer >> 8 | (answer << 8 & 0xFF00)
 
     return answer
 
@@ -131,19 +131,17 @@ def receive_one_ping(my_socket, ID, timeout):
     while True:
         startedSelect = time.time()
         whatReady = select.select([my_socket], [], [], timeLeft)
-        howLongInSelect = (time.time() - startedSelect)
+        howLongInSelect = time.time() - startedSelect
         if whatReady[0] == []:  # Timeout
             return
 
         timeReceived = time.time()
         recPacket, addr = my_socket.recvfrom(1024)
         icmpHeader = recPacket[20:28]
-        type, code, checksum, packetID, sequence = struct.unpack(
-            "bbHHh", icmpHeader
-        )
+        type, code, checksum, packetID, sequence = struct.unpack("bbHHh", icmpHeader)
         if packetID == ID:
             bytesInDouble = struct.calcsize("d")
-            timeSent = struct.unpack("d", recPacket[28:28 + bytesInDouble])[0]
+            timeSent = struct.unpack("d", recPacket[28 : 28 + bytesInDouble])[0]
             return timeReceived - timeSent
 
         timeLeft = timeLeft - howLongInSelect
@@ -226,4 +224,4 @@ def verbose_ping(dest_addr, timeout=2, count=4):
             delay = delay * 1000
             print "get ping in %0.4fms" % delay
 
-    print ''
+    print ""

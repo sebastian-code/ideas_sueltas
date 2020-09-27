@@ -19,12 +19,29 @@ from Queue import Queue
 
 num_threads = 4
 queue = Queue()
-ips = ["192.168.3.135", "192.168.3.136", "192.168.3.137", "192.168.3.138",
-       "192.168.3.139", "192.168.3.140", "192.168.3.141", "192.168.3.142",
-       "192.168.3.143", "192.168.3.144", "192.168.3.145", "192.168.3.146",
-       "192.168.3.147", "192.168.3.148", "192.168.3.149", "192.168.3.150",
-       "192.168.3.151", "192.168.3.152", "192.168.3.153", "192.168.3.154",
-       "192.168.3.155"]
+ips = [
+    "192.168.3.135",
+    "192.168.3.136",
+    "192.168.3.137",
+    "192.168.3.138",
+    "192.168.3.139",
+    "192.168.3.140",
+    "192.168.3.141",
+    "192.168.3.142",
+    "192.168.3.143",
+    "192.168.3.144",
+    "192.168.3.145",
+    "192.168.3.146",
+    "192.168.3.147",
+    "192.168.3.148",
+    "192.168.3.149",
+    "192.168.3.150",
+    "192.168.3.151",
+    "192.168.3.152",
+    "192.168.3.153",
+    "192.168.3.154",
+    "192.168.3.155",
+]
 
 
 # wraps system ping command
@@ -33,9 +50,12 @@ def pinger(i, q):
     while True:
         ip = q.get()
         print("Thread %s: Pinging %s".format(i, ip))
-        ret = subprocess.call("ping -c 1 %s" % ip, shell=True,
-                              stdout=open('tes.txt', 'w'),
-                              stderr=subprocess.STDOUT)
+        ret = subprocess.call(
+            "ping -c 1 %s" % ip,
+            shell=True,
+            stdout=open("tes.txt", "w"),
+            stderr=subprocess.STDOUT,
+        )
 
         if ret == 0:
             print("%s: is alive".format(ip))
@@ -44,6 +64,7 @@ def pinger(i, q):
             print("%s: did not respond".format(ip))
 
         q.task_done()
+
 
 # Spawn thread pool
 for i in range(num_threads):

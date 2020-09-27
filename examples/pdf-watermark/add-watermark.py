@@ -10,9 +10,9 @@ print "title = %s" % (input1.getDocumentInfo().title)
 
 # add page 1 from input1 to output document, unchanged
 watermark = PdfFileReader(file("watermark.pdf", "rb"))
-#print input1.getPage(1).mergePage(watermark.getPage(0))
+# print input1.getPage(1).mergePage(watermark.getPage(0))
 watermark.getPage(0).mergePage(input1.getPage(0))
-#output.addPage(input1.getPage(1))
+# output.addPage(input1.getPage(1))
 output.addPage(watermark.getPage(0))
 
 # print how many pages input1 has:

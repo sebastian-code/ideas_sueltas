@@ -6,11 +6,11 @@
 from reportlab.pdfgen import canvas
 import reportlab.lib.pagesizes as ps
 
-p = canvas.Canvas('test.pdf')
+p = canvas.Canvas("test.pdf")
 p.setFont("Times-Roman", 60)
 p.setStrokeColorRGB(0.74, 0.74, 0.74)
 p.setFillColorRGB(0.74, 0.74, 0.74)
-p.translate(ps.A4[0]/2, ps.A4[1]/2)
+p.translate(ps.A4[0] / 2, ps.A4[1] / 2)
 p.rotate(45)
 p.drawCentredString(80, 0, "Confidential")
 p.drawCentredString(80, 60, "Hannah Hu")

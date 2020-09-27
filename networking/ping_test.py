@@ -32,12 +32,12 @@ import random
 from time import time
 
 ICMP_ECHO_REQUEST = 8
-ICMP_CODE = socket.getprotobyname('icmp')
+ICMP_CODE = socket.getprotobyname("icmp")
 ERROR_DESCR = {
-    1: 'ERROR: ICMP messages can only be sent from processes running as root.',
-    10013: 'ERROR: ICMP messages can only be sent by users or processes with administrator rights.'
-    }
-__all__ = ['create_packet', 'echo', 'recursive']
+    1: "ERROR: ICMP messages can only be sent from processes running as root.",
+    10013: "ERROR: ICMP messages can only be sent by users or processes with administrator rights.",
+}
+__all__ = ["create_packet", "echo", "recursive"]
 
 
 def checksum(source_string):
@@ -45,19 +45,19 @@ def checksum(source_string):
     count_to = (len(source_string) / 2) * 2
     count = 0
     while count < count_to:
-        this_val = ord(source_string[count + 1])*256+ord(source_string[count])
+        this_val = ord(source_string[count + 1]) * 256 + ord(source_string[count])
         sum = sum + this_val
-        sum = sum & 0xffffffff  # Necessary?
+        sum = sum & 0xFFFFFFFF  # Necessary?
         count = count + 2
     if count_to < len(source_string):
         sum = sum + ord(source_string[len(source_string) - 1])
-        sum = sum & 0xffffffff  # Necessary?
-    sum = (sum >> 16) + (sum & 0xffff)
+        sum = sum & 0xFFFFFFFF  # Necessary?
+    sum = (sum >> 16) + (sum & 0xFFFF)
     sum = sum + (sum >> 16)
     answer = ~sum
-    answer = answer & 0xffff
+    answer = answer & 0xFFFF
 
-    answer = answer >> 8 | (answer << 8 & 0xff00)
+    answer = answer >> 8 | (answer << 8 & 0xFF00)
     return answer
 
 
@@ -65,11 +65,13 @@ def create_packet(id):
     """Creates a new echo request packet based on the given "id"."""
     # Builds Dummy Header
     # Header is type (8), code (8), checksum (16), id (16), sequence (16)
-    header = struct.pack('bbHHh', ICMP_ECHO_REQUEST, 0, 0, id, 1)
-    data = 192 * 'Q'
+    header = struct.pack("bbHHh", ICMP_ECHO_REQUEST, 0, 0, id, 1)
+    data = 192 * "Q"
 
     # Builds Real Header
-    header = struct.pack('bbHHh', ICMP_ECHO_REQUEST, 0, socket.htons(checksum(header + data)), id, 1)
+    header = struct.pack(
+        "bbHHh", ICMP_ECHO_REQUEST, 0, socket.htons(checksum(header + data)), id, 1
+    )
     return header + data
 
 
@@ -83,7 +85,7 @@ def response_handler(sock, packet_id, time_sent, timeout):
         time_received = time()
         rec_packet, addr = sock.recvfrom(1024)
         icmp_header = rec_packet[20:28]
-        type, code, checksum, rec_id, sequence = struct.unpack('bbHHh', icmp_header)
+        type, code, checksum, rec_id, sequence = struct.unpack("bbHHh", icmp_header)
 
         if rec_id == packet_id:
             return time_received - time_sent
@@ -110,7 +112,7 @@ def echo(dest_addr, timeout=1):
     except socket.error, (error_number, msg):
         if error_number in ERROR_DESCR:
             # Operation not permitted
-            raise socket.error(''.join((msg, ERROR_DESCR[error_number])))
+            raise socket.error("".join((msg, ERROR_DESCR[error_number])))
         raise  # Raises the original error
 
     try:
@@ -156,17 +158,38 @@ def recursive(dest_addr, count=10, timeout=1, verbose=False):
                 print("Echo Request Failed...")
                 nrc += 1
             else:
-                print("Echo Received:  sequence_id={}  delay={} ms").format(i, round(log[-1]*1000, 3))
+                print("Echo Received:  sequence_id={}  delay={} ms").format(
+                    i, round(log[-1] * 1000, 3)
+                )
 
     return log
 
 
 # Testing
-if __name__ == '__main__':
-    ips = ["192.168.3.135", "192.168.3.136", "192.168.3.137", "192.168.3.138", "192.168.3.139", "192.168.3.140",
-           "192.168.3.141", "192.168.3.142", "192.168.3.143", "192.168.3.144", "192.168.3.145", "192.168.3.146",
-           "192.168.3.147", "192.168.3.148", "192.168.3.149", "192.168.3.150", "192.168.3.151", "192.168.3.152",
-           "192.168.3.153", "192.168.3.154", "192.168.3.155"]
+if __name__ == "__main__":
+    ips = [
+        "192.168.3.135",
+        "192.168.3.136",
+        "192.168.3.137",
+        "192.168.3.138",
+        "192.168.3.139",
+        "192.168.3.140",
+        "192.168.3.141",
+        "192.168.3.142",
+        "192.168.3.143",
+        "192.168.3.144",
+        "192.168.3.145",
+        "192.168.3.146",
+        "192.168.3.147",
+        "192.168.3.148",
+        "192.168.3.149",
+        "192.168.3.150",
+        "192.168.3.151",
+        "192.168.3.152",
+        "192.168.3.153",
+        "192.168.3.154",
+        "192.168.3.155",
+    ]
 
     for ip in ips:
         recursive(ip, 10, 2, True)

@@ -5,14 +5,16 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
+
 def code2html(code, lang):
-    lexer = get_lexer_by_name(lang, encoding='utf-8', stripall=True)
-    formatter = HtmlFormatter(encoding='utf-8')
-#            full = True,
-#            linenos=False,
-#            noclasses="True")
+    lexer = get_lexer_by_name(lang, encoding="utf-8", stripall=True)
+    formatter = HtmlFormatter(encoding="utf-8")
+    #            full = True,
+    #            linenos=False,
+    #            noclasses="True")
     result = highlight(code, lexer, formatter)
     return result
+
 
 def output_head():
     print """
@@ -29,6 +31,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     <body>
     """
 
+
 def output_end():
     print "</body>"
     print "</html>"
@@ -38,5 +41,5 @@ output_head()
 f = open(__file__)
 code = f.read()
 f.close()
-print code2html(code, 'python')
+print code2html(code, "python")
 output_end()

@@ -25,7 +25,7 @@ import signal
 import socket
 
 
-__version__ = '0.2.7'
+__version__ = "0.2.7"
 
 # Some global variables we use
 source = None
@@ -43,6 +43,7 @@ except ImportError:
 
     except ImportError:
         from xml.dom import minidom as DOM
+
         ET = None
 
 # Begin import game to handle Python 2 and Python 3
@@ -90,6 +91,7 @@ try:
     import builtins
 
 except ImportError:
+
     def print_(*args, **kwargs):
         """The new-style print function taken from
         https://pypi.python.org/pypi/six/
@@ -139,8 +141,10 @@ except ImportError:
                 write(sep)
             write(arg)
         write(end)
+
+
 else:
-    print_ = getattr(builtins, 'print')
+    print_ = getattr(builtins, "print")
     del builtins
 
 
@@ -162,9 +166,9 @@ def distance(origin, destination):
 
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
-    a = (math.sin(dlat / 2) * math.sin(dlat / 2) + math.cos(math.radians(lat1))
-         * math.cos(math.radians(lat2)) * math.sin(dlon / 2)
-         * math.sin(dlon / 2))
+    a = math.sin(dlat / 2) * math.sin(dlat / 2) + math.cos(
+        math.radians(lat1)
+    ) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) * math.sin(dlon / 2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     d = radius * c
 
@@ -205,7 +209,7 @@ def downloadSpeed(files, quiet=False):
             thread.start()
             q.put(thread, True)
             if not quiet and not shutdown_event.isSet():
-                sys.stdout.write('.')
+                sys.stdout.write(".")
                 sys.stdout.flush()
 
     finished = []
@@ -228,7 +232,7 @@ def downloadSpeed(files, quiet=False):
         prod_thread.join(timeout=0.1)
     while cons_thread.isAlive():
         cons_thread.join(timeout=0.1)
-    return (sum(finished) / (time.time() - start))
+    return sum(finished) / (time.time() - start)
 
 
 class FilePutter(threading.Thread):
@@ -236,9 +240,9 @@ class FilePutter(threading.Thread):
 
     def __init__(self, url, start, size):
         self.url = url
-        chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         data = chars * (int(round(int(size) / 36.0)))
-        self.data = ('content1=%s' % data[0:int(size) - 9]).encode()
+        self.data = ("content1=%s" % data[0 : int(size) - 9]).encode()
         del data
         self.result = None
         self.starttime = start
@@ -246,8 +250,7 @@ class FilePutter(threading.Thread):
 
     def run(self):
         try:
-            if ((time.time() - self.starttime) <= 10 and
-                    not shutdown_event.isSet()):
+            if (time.time() - self.starttime) <= 10 and not shutdown_event.isSet():
                 f = urlopen(self.url, self.data)
                 f.read(11)
                 f.close()
@@ -269,7 +272,7 @@ def uploadSpeed(url, sizes, quiet=False):
             thread.start()
             q.put(thread, True)
             if not quiet and not shutdown_event.isSet():
-                sys.stdout.write('.')
+                sys.stdout.write(".")
                 sys.stdout.flush()
 
     finished = []
@@ -292,7 +295,7 @@ def uploadSpeed(url, sizes, quiet=False):
         prod_thread.join(timeout=0.1)
     while cons_thread.isAlive():
         cons_thread.join(timeout=0.1)
-    return (sum(finished) / (time.time() - start))
+    return sum(finished) / (time.time() - start)
 
 
 def getAttributesByTagName(dom, tagName):
@@ -311,7 +314,7 @@ def getConfig():
     we are interested in
     """
 
-    uh = urlopen('http://www.speedtest.net/speedtest-config.php')
+    uh = urlopen("http://www.speedtest.net/speedtest-config.php")
     configxml = []
     while 1:
         configxml.append(uh.read(10240))
@@ -321,19 +324,21 @@ def getConfig():
         return None
     uh.close()
     try:
-        root = ET.fromstring(''.encode().join(configxml))
+        root = ET.fromstring("".encode().join(configxml))
         config = {
-            'client': root.find('client').attrib,
-            'times': root.find('times').attrib,
-            'download': root.find('download').attrib,
-            'upload': root.find('upload').attrib}
+            "client": root.find("client").attrib,
+            "times": root.find("times").attrib,
+            "download": root.find("download").attrib,
+            "upload": root.find("upload").attrib,
+        }
     except AttributeError:
-        root = DOM.parseString(''.join(configxml))
+        root = DOM.parseString("".join(configxml))
         config = {
-            'client': getAttributesByTagName(root, 'client'),
-            'times': getAttributesByTagName(root, 'times'),
-            'download': getAttributesByTagName(root, 'download'),
-            'upload': getAttributesByTagName(root, 'upload')}
+            "client": getAttributesByTagName(root, "client"),
+            "times": getAttributesByTagName(root, "times"),
+            "download": getAttributesByTagName(root, "download"),
+            "upload": getAttributesByTagName(root, "upload"),
+        }
     del root
     del configxml
     return config
@@ -344,7 +349,7 @@ def closestServers(client, all=False):
     distance
     """
 
-    uh = urlopen('http://www.speedtest.net/speedtest-servers.php')
+    uh = urlopen("http://www.speedtest.net/speedtest-servers.php")
     serversxml = []
     while 1:
         serversxml.append(uh.read(10240))
@@ -354,20 +359,22 @@ def closestServers(client, all=False):
         return None
     uh.close()
     try:
-        root = ET.fromstring(''.encode().join(serversxml))
-        elements = root.getiterator('server')
+        root = ET.fromstring("".encode().join(serversxml))
+        elements = root.getiterator("server")
     except AttributeError:
-        root = DOM.parseString(''.join(serversxml))
-        elements = root.getElementsByTagName('server')
+        root = DOM.parseString("".join(serversxml))
+        elements = root.getElementsByTagName("server")
     servers = {}
     for server in elements:
         try:
             attrib = server.attrib
         except AttributeError:
             attrib = dict(list(server.attributes.items()))
-        d = distance([float(client['lat']), float(client['lon'])],
-                     [float(attrib.get('lat')), float(attrib.get('lon'))])
-        attrib['d'] = d
+        d = distance(
+            [float(client["lat"]), float(client["lon"])],
+            [float(attrib.get("lat")), float(attrib.get("lon"))],
+        )
+        attrib["d"] = d
         if d not in servers:
             servers[d] = [attrib]
         else:
@@ -398,17 +405,17 @@ def getBestServer(servers):
     results = {}
     for server in servers:
         cum = []
-        url = os.path.dirname(server['url'])
+        url = os.path.dirname(server["url"])
         for i in range(0, 3):
             try:
-                uh = urlopen('%s/latency.txt' % url)
+                uh = urlopen("%s/latency.txt" % url)
             except (HTTPError, URLError):
                 cum.append(3600)
                 continue
             start = time.time()
             text = uh.read(9)
             total = time.time() - start
-            if int(uh.code) == 200 and text == 'test=test'.encode():
+            if int(uh.code) == 200 and text == "test=test".encode():
                 cum.append(total)
             else:
                 cum.append(3600)
@@ -418,7 +425,7 @@ def getBestServer(servers):
 
     fastest = sorted(results.keys())[0]
     best = results[fastest]
-    best['latency'] = fastest
+    best["latency"] = fastest
 
     return best
 
@@ -430,7 +437,7 @@ def ctrl_c(signum, frame):
 
     global shutdown_event
     shutdown_event.set()
-    raise SystemExit('\nCancelling...')
+    raise SystemExit("\nCancelling...")
 
 
 def version():
@@ -448,11 +455,12 @@ def speedtest():
     signal.signal(signal.SIGINT, ctrl_c)
 
     description = (
-        'Command line interface for testing internet bandwidth using '
-        'speedtest.net.\n'
-        '------------------------------------------------------------'
-        '--------------\n'
-        'https://github.com/sivel/speedtest-cli')
+        "Command line interface for testing internet bandwidth using "
+        "speedtest.net.\n"
+        "------------------------------------------------------------"
+        "--------------\n"
+        "https://github.com/sivel/speedtest-cli"
+    )
 
     parser = ArgParser(description=description)
     # Give optparse.OptionParser an `add_argument` method for
@@ -461,24 +469,36 @@ def speedtest():
         parser.add_argument = parser.add_option
     except AttributeError:
         pass
-    parser.add_argument('--bytes', dest='units', action='store_const',
-                        const=('bytes', 1), default=('bits', 8),
-                        help='Display values in bytes instead of bits. Does '
-                             'not affect the image generated by --share')
-    parser.add_argument('--share', action='store_true',
-                        help='Generate and provide a URL to the speedtest.net '
-                             'share results image')
-    parser.add_argument('--simple', action='store_true',
-                        help='Suppress verbose output, only show basic '
-                             'information')
-    parser.add_argument('--list', action='store_true',
-                        help='Display a list of speedtest.net servers '
-                             'sorted by distance')
-    parser.add_argument('--server', help='Specify a server ID to test against')
-    parser.add_argument('--mini', help='URL of the Speedtest Mini server')
-    parser.add_argument('--source', help='Source IP address to bind to')
-    parser.add_argument('--version', action='store_true',
-                        help='Show the version number and exit')
+    parser.add_argument(
+        "--bytes",
+        dest="units",
+        action="store_const",
+        const=("bytes", 1),
+        default=("bits", 8),
+        help="Display values in bytes instead of bits. Does "
+        "not affect the image generated by --share",
+    )
+    parser.add_argument(
+        "--share",
+        action="store_true",
+        help="Generate and provide a URL to the speedtest.net " "share results image",
+    )
+    parser.add_argument(
+        "--simple",
+        action="store_true",
+        help="Suppress verbose output, only show basic " "information",
+    )
+    parser.add_argument(
+        "--list",
+        action="store_true",
+        help="Display a list of speedtest.net servers " "sorted by distance",
+    )
+    parser.add_argument("--server", help="Specify a server ID to test against")
+    parser.add_argument("--mini", help="URL of the Speedtest Mini server")
+    parser.add_argument("--source", help="Source IP address to bind to")
+    parser.add_argument(
+        "--version", action="store_true", help="Show the version number and exit"
+    )
 
     options = parser.parse_args()
     if isinstance(options, tuple):
@@ -497,46 +517,47 @@ def speedtest():
         socket.socket = bound_socket
 
     if not args.simple:
-        print_('Retrieving speedtest.net configuration...')
+        print_("Retrieving speedtest.net configuration...")
     try:
         config = getConfig()
     except URLError:
-        print_('Cannot retrieve speedtest configuration')
+        print_("Cannot retrieve speedtest configuration")
         sys.exit(1)
 
     if not args.simple:
-        print_('Retrieving speedtest.net server list...')
+        print_("Retrieving speedtest.net server list...")
     if args.list or args.server:
-        servers = closestServers(config['client'], True)
+        servers = closestServers(config["client"], True)
         if args.list:
             serverList = []
             for server in servers:
-                line = ('%(id)4s) %(sponsor)s (%(name)s, %(country)s) '
-                        '[%(d)0.2f km]' % server)
+                line = (
+                    "%(id)4s) %(sponsor)s (%(name)s, %(country)s) "
+                    "[%(d)0.2f km]" % server
+                )
                 serverList.append(line)
             # Python 2.7 and newer seem to be ok with the resultant encoding
             # from parsing the XML, but older versions have some issues.
             # This block should detect whether we need to encode or not
             try:
                 unicode()
-                print_('\n'.join(serverList).encode('utf-8', 'ignore'))
+                print_("\n".join(serverList).encode("utf-8", "ignore"))
             except NameError:
-                print_('\n'.join(serverList))
+                print_("\n".join(serverList))
             except IOError:
                 pass
             sys.exit(0)
     else:
-        servers = closestServers(config['client'])
+        servers = closestServers(config["client"])
 
     if not args.simple:
-        print_('Testing from %(isp)s (%(ip)s)...' % config['client'])
+        print_("Testing from %(isp)s (%(ip)s)..." % config["client"])
 
     if args.server:
         try:
-            best = getBestServer(filter(lambda x: x['id'] == args.server,
-                                        servers))
+            best = getBestServer(filter(lambda x: x["id"] == args.server, servers))
         except IndexError:
-            print_('Invalid server ID')
+            print_("Invalid server ID")
             sys.exit(1)
     elif args.mini:
         name, ext = os.path.splitext(args.mini)
@@ -548,43 +569,47 @@ def speedtest():
         try:
             f = urlopen(args.mini)
         except:
-            print_('Invalid Speedtest Mini URL')
+            print_("Invalid Speedtest Mini URL")
             sys.exit(1)
         else:
             text = f.read()
             f.close()
         extension = re.findall('upload_extension: "([^"]+)"', text.decode())
         if not extension:
-            for ext in ['php', 'asp', 'aspx', 'jsp']:
+            for ext in ["php", "asp", "aspx", "jsp"]:
                 try:
-                    f = urlopen('%s/speedtest/upload.%s' % (args.mini, ext))
+                    f = urlopen("%s/speedtest/upload.%s" % (args.mini, ext))
                 except:
                     pass
                 else:
                     data = f.read().strip()
-                    if (f.code == 200 and
-                            len(data.splitlines()) == 1 and
-                            re.match('size=[0-9]', data)):
+                    if (
+                        f.code == 200
+                        and len(data.splitlines()) == 1
+                        and re.match("size=[0-9]", data)
+                    ):
                         extension = [ext]
                         break
         if not urlparts or not extension:
-            print_('Please provide the full URL of your Speedtest Mini server')
+            print_("Please provide the full URL of your Speedtest Mini server")
             sys.exit(1)
-        servers = [{
-            'sponsor': 'Speedtest Mini',
-            'name': urlparts[1],
-            'd': 0,
-            'url': '%s/speedtest/upload.%s' % (url.rstrip('/'), extension[0]),
-            'latency': 0,
-            'id': 0
-        }]
+        servers = [
+            {
+                "sponsor": "Speedtest Mini",
+                "name": urlparts[1],
+                "d": 0,
+                "url": "%s/speedtest/upload.%s" % (url.rstrip("/"), extension[0]),
+                "latency": 0,
+                "id": 0,
+            }
+        ]
         try:
             best = getBestServer(servers)
         except:
             best = servers[0]
     else:
         if not args.simple:
-            print_('Selecting best server based on ping...')
+            print_("Selecting best server based on ping...")
         best = getBestServer(servers)
 
     if not args.simple:
@@ -593,95 +618,109 @@ def speedtest():
         # This block should detect whether we need to encode or not
         try:
             unicode()
-            print_(('Hosted by %(sponsor)s (%(name)s) [%(d)0.2f km]: '
-                   '%(latency)s ms' % best).encode('utf-8', 'ignore'))
+            print_(
+                (
+                    "Hosted by %(sponsor)s (%(name)s) [%(d)0.2f km]: "
+                    "%(latency)s ms" % best
+                ).encode("utf-8", "ignore")
+            )
         except NameError:
-            print_('Hosted by %(sponsor)s (%(name)s) [%(d)0.2f km]: '
-                   '%(latency)s ms' % best)
+            print_(
+                "Hosted by %(sponsor)s (%(name)s) [%(d)0.2f km]: "
+                "%(latency)s ms" % best
+            )
     else:
-        print_('Ping: %(latency)s ms' % best)
+        print_("Ping: %(latency)s ms" % best)
 
     sizes = [350, 500, 750, 1000, 1500, 2000, 2500, 3000, 3500, 4000]
     urls = []
     for size in sizes:
         for i in range(0, 4):
-            urls.append('%s/random%sx%s.jpg' %
-                        (os.path.dirname(best['url']), size, size))
+            urls.append(
+                "%s/random%sx%s.jpg" % (os.path.dirname(best["url"]), size, size)
+            )
     if not args.simple:
-        print_('Testing download speed', end='')
+        print_("Testing download speed", end="")
     dlspeed = downloadSpeed(urls, args.simple)
     if not args.simple:
         print_()
-    print_('Download: %0.2f M%s/s' %
-           ((dlspeed / 1000 / 1000) * args.units[1], args.units[0]))
+    print_(
+        "Download: %0.2f M%s/s"
+        % ((dlspeed / 1000 / 1000) * args.units[1], args.units[0])
+    )
 
-    sizesizes = [int(.25 * 1000 * 1000), int(.5 * 1000 * 1000)]
+    sizesizes = [int(0.25 * 1000 * 1000), int(0.5 * 1000 * 1000)]
     sizes = []
     for size in sizesizes:
         for i in range(0, 25):
             sizes.append(size)
     if not args.simple:
-        print_('Testing upload speed', end='')
-    ulspeed = uploadSpeed(best['url'], sizes, args.simple)
+        print_("Testing upload speed", end="")
+    ulspeed = uploadSpeed(best["url"], sizes, args.simple)
     if not args.simple:
         print_()
-    print_('Upload: %0.2f M%s/s' %
-           ((ulspeed / 1000 / 1000) * args.units[1], args.units[0]))
+    print_(
+        "Upload: %0.2f M%s/s" % ((ulspeed / 1000 / 1000) * args.units[1], args.units[0])
+    )
 
     if args.share and args.mini:
-        print_('Cannot generate a speedtest.net share results image while '
-               'testing against a Speedtest Mini server')
+        print_(
+            "Cannot generate a speedtest.net share results image while "
+            "testing against a Speedtest Mini server"
+        )
     elif args.share:
         dlspeedk = int(round((dlspeed / 1000) * 8, 0))
-        ping = int(round(best['latency'], 0))
+        ping = int(round(best["latency"], 0))
         ulspeedk = int(round((ulspeed / 1000) * 8, 0))
 
         # Build the request to send results back to speedtest.net
         # We use a list instead of a dict because the API expects parameters
         # in a certain order
         apiData = [
-            'download=%s' % dlspeedk,
-            'ping=%s' % ping,
-            'upload=%s' % ulspeedk,
-            'promo=',
-            'startmode=%s' % 'pingselect',
-            'recommendedserverid=%s' % best['id'],
-            'accuracy=%s' % 1,
-            'serverid=%s' % best['id'],
-            'hash=%s' % md5(('%s-%s-%s-%s' %
-                             (ping, ulspeedk, dlspeedk, '297aae72'))
-                            .encode()).hexdigest()]
+            "download=%s" % dlspeedk,
+            "ping=%s" % ping,
+            "upload=%s" % ulspeedk,
+            "promo=",
+            "startmode=%s" % "pingselect",
+            "recommendedserverid=%s" % best["id"],
+            "accuracy=%s" % 1,
+            "serverid=%s" % best["id"],
+            "hash=%s"
+            % md5(
+                ("%s-%s-%s-%s" % (ping, ulspeedk, dlspeedk, "297aae72")).encode()
+            ).hexdigest(),
+        ]
 
-        req = Request('http://www.speedtest.net/api/api.php',
-                      data='&'.join(apiData).encode())
-        req.add_header('Referer', 'http://c.speedtest.net/flash/speedtest.swf')
+        req = Request(
+            "http://www.speedtest.net/api/api.php", data="&".join(apiData).encode()
+        )
+        req.add_header("Referer", "http://c.speedtest.net/flash/speedtest.swf")
         f = urlopen(req)
         response = f.read()
         code = f.code
         f.close()
 
         if int(code) != 200:
-            print_('Could not submit results to speedtest.net')
+            print_("Could not submit results to speedtest.net")
             sys.exit(1)
 
         qsargs = parse_qs(response.decode())
-        resultid = qsargs.get('resultid')
+        resultid = qsargs.get("resultid")
         if not resultid or len(resultid) != 1:
-            print_('Could not submit results to speedtest.net')
+            print_("Could not submit results to speedtest.net")
             sys.exit(1)
 
-        print_('Share results: http://www.speedtest.net/result/%s.png' %
-               resultid[0])
+        print_("Share results: http://www.speedtest.net/result/%s.png" % resultid[0])
 
 
 def main():
     try:
         speedtest()
     except KeyboardInterrupt:
-        print_('\nCancelling...')
+        print_("\nCancelling...")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
 
 # vim:ts=4:sw=4:expandtab

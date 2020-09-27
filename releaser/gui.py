@@ -22,12 +22,13 @@ import os
 import gtk
 import gtk.glade
 
-class GuiWorker(object):
 
-    def __init__(self, file = 'gui.glade'):
+class GuiWorker(object):
+    def __init__(self, file="gui.glade"):
         self.xml = gtk.glade.XML(file)
 
     def get_widget(self, name):
         return self.xml.get_widget(name)
+
 
 worker = GuiWorker()

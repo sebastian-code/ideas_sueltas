@@ -6,7 +6,7 @@ import random
 
 def classic(chars, length):
     tr = []
-    l = len(chars)-1
+    l = len(chars) - 1
     for i in xrange(length):
         tr.append(chars[random.randint(0, l)])
 
@@ -14,7 +14,7 @@ def classic(chars, length):
 
 
 def simpleSample(chars, length):
-    return "".join(random.sample(chars*length, length))
+    return "".join(random.sample(chars * length, length))
 
 
 def choice(chars, length):
@@ -24,8 +24,11 @@ def choice(chars, length):
 if __name__ == "__main__":
     chars = string.letters + string.digits
     times = 100
-    print("Random string generators comparison.\n" + "Dictionary length: %s\n"
-          + "Times to test every algorithm: %s\n") % (len(chars), times)
+    print (
+        "Random string generators comparison.\n"
+        + "Dictionary length: %s\n"
+        + "Times to test every algorithm: %s\n"
+    ) % (len(chars), times)
 
     for size in (8, 16, 32, 64, 128, 256, 512, 1024):
         print "String size: %s" % size
@@ -39,15 +42,15 @@ if __name__ == "__main__":
                 t0 = time()
                 text = i(chars, size)
                 t1 = time()
-                t = t1-t0
-                tf += t/times
+                t = t1 - t0
+                tf += t / times
                 if not tmin or t < tmin:
                     tmin = t
                 if not tmax or t > tmax:
                     tmax = t
-            #print "Algorithm: %s\nTime: %s\nGenerated: %s\n" % (str(i), t1-t0, text)
-            print("%s\n  (%fs, min %fs, max %fs)" % (repr(i), tf, tmin, tmax))
+            # print "Algorithm: %s\nTime: %s\nGenerated: %s\n" % (str(i), t1-t0, text)
+            print ("%s\n  (%fs, min %fs, max %fs)" % (repr(i), tf, tmin, tmax))
             if not winnertime or tf < winnertime:
                 winnertime = tf
                 winner = i
-        print("Winner: %s (%f seconds)" % (winner, winnertime))
+        print ("Winner: %s (%f seconds)" % (winner, winnertime))
